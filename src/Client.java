@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import common.*;
@@ -9,8 +9,12 @@ public class Client {
     private String destinationAddress;
     private int portNumber;
 
-    static int soTimeout = 10; //milliseconds - TcpClientSimpleNB.java
+    private InputStream reader;
+    private OutputStream writer;
 
+
+    static int soTimeout = 10; //milliseconds - TcpClientSimpleNB.java
+    static int bufferSize = 80;
 
     public int getPortNumber() {
         return portNumber;
@@ -57,10 +61,22 @@ public class Client {
         }
         try {
             socket = new Socket(destinationAddress, portNumber);
-            socket.setSoTimeout(soTimeout);
+            //socket.setSoTimeout(soTimeout);
+            reader = socket.getInputStream();
+            writer = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void sendMessage() throws ClientHasNotConnectedException {
+        if (!socket.isConnected()) {
+            throw new ClientHasNotConnectedException();
+        }
+
+
+
+
+
     }
 
 

@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+
 import common.*;
 
 public class Client {
@@ -8,6 +9,7 @@ public class Client {
     private Socket socket;
     private String destinationAddress;
     private int portNumber;
+    private String username;
 
     private InputStream reader;
     private OutputStream writer;
@@ -19,12 +21,15 @@ public class Client {
     public int getPortNumber() {
         return portNumber;
     }
+
     public String getDestinationAddress() {
         return destinationAddress;
     }
+
     public Socket getSocket() {
         return socket;
     }
+
     public void setPortNumber() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
@@ -39,6 +44,7 @@ public class Client {
         }
         portNumber = tempPort;
     }
+
     public void setPortNumber(int number) throws InvalidPortNumberException {
         if (number < 1023 || number > 65535) {
             throw new InvalidPortNumberException();
@@ -46,18 +52,21 @@ public class Client {
             portNumber = number;
         }
     }
+
     public void setDestinationAddress() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         System.out.print("Please enter your destination address/IP: ");
         destinationAddress = kb.nextLine();
     }
+
     public void setDestinationAddress(String Address) {
         destinationAddress = Address;
     }
-    public void connectSocket() {
+
+    public void connectSocket() throws ClientHasNotConnectedException {
         if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
-            throw new IllegalArgumentException("Destination Address and/or port number has not been set.");
+            throw new ClientHasNotConnectedException();
         }
         try {
             socket = new Socket(destinationAddress, portNumber);
@@ -68,18 +77,58 @@ public class Client {
             e.printStackTrace();
         }
     }
-    public void sendMessage() throws ClientHasNotConnectedException {
+
+    public void sendMessages() throws ClientHasNotConnectedException, UsernameNotSetException {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }
-        System.out.print("Input the message you would like to send: ");
+        if (username == null) {
+            throw new UsernameNotSetException();
+        }
+        Scanner kb = new Scanner(System.in);
+        String msg = "";
+        PrintWriter sender = new PrintWriter(writer, true);
+        while (!msg.equals("q")) {
+            System.out.print("Enter your message:");
+            if (!msg.equals("q")) {
+                msg = kb.nextLine();
+                sender.print(username + ": " + msg);
+                System.out.println(username + ": " + msg);
+            }
+        }
+        sender.close();
+    }
 
+    public void sendMessage(String msg) throws ClientHasNotConnectedException, UsernameNotSetException {
+        if (!socket.isConnected()) {
+            throw new ClientHasNotConnectedException();
+        }
+        if (username == null) {
+            throw new UsernameNotSetException();
+        }
+        PrintWriter sender = new PrintWriter(writer, true);
+        sender.print(username + ": " + msg);
+        System.out.println(username + ": " + msg);
+        sender.close();
+    }
 
+    private void receiveMessages() throws ClientHasNotConnectedException {
+        if (!socket.isConnected()) {
+            throw new ClientHasNotConnectedException();
+        }
+        BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
+        try {
+            while (true) {
+                System.out.println(receiver.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-
-
+    public void run() throws ClientHasNotConnectedException {
+        receiveMessages();
     }
 
 
-    }
+}

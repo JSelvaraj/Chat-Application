@@ -3,15 +3,35 @@ import common.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ServiceMain {
+public class ServiceMain extends Thread {
     public static void main(String args[]) {
+        ServiceMain program = new ServiceMain();
+        int choice = 0;
+        while (choice != 4) {
+            choice = program.menu();
+            switch (choice) {
+                case 1: program.setDestinationAddress();
+                    program.setPortNumber();
+                    break;
+                case 2: program.connectSocket();
+                    program.sendMessages();
+                    break;
+                case 3:
+                    program.connectHostSocket();
+                    program.sendMessages();
+                    break;
+            }
+        }
+
+
+
 
     }
 
     private Socket socket;
-    private ServerSocket hostSocket;
     private String destinationAddress;
     private int portNumber;
     private String username;
@@ -69,7 +89,7 @@ public class ServiceMain {
         destinationAddress = Address;
     }
 
-    public void connectSocket() throws ClientHasNotConnectedException {
+    public void connectSocket() {
         if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
             throw new ClientHasNotConnectedException();
         }
@@ -85,6 +105,7 @@ public class ServiceMain {
 
     public void connectHostSocket() {
         try {
+            ServerSocket hostSocket = new ServerSocket();
             socket = hostSocket.accept();
             reader = socket.getInputStream();
             writer = socket.getOutputStream();
@@ -93,41 +114,54 @@ public class ServiceMain {
         }
     }
 
-    public void sendMessages() throws ClientHasNotConnectedException, UsernameNotSetException {
-        if (!socket.isConnected()) {
-            throw new ClientHasNotConnectedException();
+    public void sendMessages(){
+        try {
+            if (!socket.isConnected()) {
+                throw new ClientHasNotConnectedException();
+            } else if (username == null) {
+                throw new UsernameNotSetException();
+            } else {
+                Scanner kb = new Scanner(System.in);
+                String msg = "";
+                PrintWriter sender = new PrintWriter(writer, true);
+                while (!msg.equals("q")) {
+                    System.out.print("Enter your message:");
+                    if (!msg.equals("q")) {
+                        msg = kb.nextLine();
+                        sender.print(username + ": " + msg);
+                        System.out.println(username + ": " + msg);
+                    }
+                }
+                sender.close();
+            }
+        } catch (ClientHasNotConnectedException e) {
+            System.out.println("You have not connected to a host");
+        } catch (UsernameNotSetException e) {
+            System.out.println("You have not set a username");
         }
-        if (username == null) {
-            throw new UsernameNotSetException();
-        }
-        Scanner kb = new Scanner(System.in);
-        String msg = "";
-        PrintWriter sender = new PrintWriter(writer, true);
-        while (!msg.equals("q")) {
-            System.out.print("Enter your message:");
-            if (!msg.equals("q")) {
-                msg = kb.nextLine();
+
+    }
+
+    public void sendMessage(String msg){
+        try {
+            if (!socket.isConnected()) {
+                throw new ClientHasNotConnectedException();
+            } else if (username == null) {
+                throw new UsernameNotSetException();
+            } else {
+                PrintWriter sender = new PrintWriter(writer, true);
                 sender.print(username + ": " + msg);
                 System.out.println(username + ": " + msg);
+                sender.close();
             }
+        } catch (ClientHasNotConnectedException e) {
+            System.out.println("You have not connected to a host");
+        } catch (UsernameNotSetException e) {
+            System.out.println("You have not set a username");
         }
-        sender.close();
     }
 
-    public void sendMessage(String msg) throws ClientHasNotConnectedException, UsernameNotSetException {
-        if (!socket.isConnected()) {
-            throw new ClientHasNotConnectedException();
-        }
-        if (username == null) {
-            throw new UsernameNotSetException();
-        }
-        PrintWriter sender = new PrintWriter(writer, true);
-        sender.print(username + ": " + msg);
-        System.out.println(username + ": " + msg);
-        sender.close();
-    }
-
-    private void receiveMessages() throws ClientHasNotConnectedException {
+    private void receiveMessages() {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }
@@ -138,11 +172,43 @@ public class ServiceMain {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } 
+        }
     }
 
-    public void run() throws ClientHasNotConnectedException {
-        receiveMessages();
+    public void run() { receiveMessages();}
+
+    private int menu() {
+        Scanner kb = new Scanner(System.in);
+        int choice = 0;
+        System.out.println();
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("Options:");
+        System.out.println();
+        System.out.println("1. Set Destination Address and IP");
+        System.out.println("2. Connect to another user");
+        System.out.println("3. Host another user");
+        System.out.println("4. Quit");
+        System.out.println();
+        System.out.print("Choose an Option 1/2/3/4: ");
+        while (choice < 1 && choice > 4) {
+            System.out.println();
+            System.out.print("Choose an Option 1/2/3/4: ");
+            try {
+                choice = kb.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Usage: 1/2/3/4");
+            }
+
+        }
+        return choice;
+
     }
+
+
+
+
+
 
 }

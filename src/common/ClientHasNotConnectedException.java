@@ -1,4 +1,4 @@
 package common;
 
-public class ClientHasNotConnectedException extends Exception {
+public class ClientHasNotConnectedException extends RuntimeException {
 }

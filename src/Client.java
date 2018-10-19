@@ -25,7 +25,7 @@ public class Client {
     public Socket getSocket() {
         return socket;
     }
-    public void inputPortNumber() {
+    public void setPortNumber() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         int tempPort = 0;
@@ -39,20 +39,20 @@ public class Client {
         }
         portNumber = tempPort;
     }
-    public void inputPortNumber(int number) throws InvalidPortNumberException {
+    public void setPortNumber(int number) throws InvalidPortNumberException {
         if (number < 1023 || number > 65535) {
             throw new InvalidPortNumberException();
         } else {
             portNumber = number;
         }
     }
-    public void inputDestinationAddress() {
+    public void setDestinationAddress() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         System.out.print("Please enter your destination address/IP: ");
         destinationAddress = kb.nextLine();
     }
-    public void inputDestinationAddress(String Address) {
+    public void setDestinationAddress(String Address) {
         destinationAddress = Address;
     }
     public void connectSocket() {
@@ -72,6 +72,8 @@ public class Client {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }
+        System.out.print("Input the message you would like to send: ");
+
 
 
 

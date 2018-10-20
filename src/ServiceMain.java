@@ -3,6 +3,7 @@ import common.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -130,6 +131,7 @@ public class ServiceMain extends Thread {
                         msg = kb.nextLine();
                         sender.print(username + ": " + msg);
                         System.out.println(username + ": " + msg);
+                        testConnection();
                     }
                 }
                 sender.close();
@@ -138,6 +140,9 @@ public class ServiceMain extends Thread {
             System.out.println("You have not connected to a host");
         } catch (UsernameNotSetException e) {
             System.out.println("You have not set a username");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ConnectionLostException e) {
         }
 
     }
@@ -206,7 +211,15 @@ public class ServiceMain extends Thread {
 
     }
 
-
+    private void testConnection() throws IOException, SocketTimeoutException, ConnectionLostException {
+        int oldTimout = socket.getSoTimeout();
+        socket.setSoTimeout(500);
+        int status = reader.read();
+        if (status == -1) {
+            throw new ConnectionLostException("Connection has been lost");
+        }
+        socket.setSoTimeout(oldTimout);
+    }
 
 
 

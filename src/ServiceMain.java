@@ -3,16 +3,21 @@ import common.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+/**
+ * Resources
+ *  - https://www.baeldung.com/java-thread-stop
+ */
+
 
 public class ServiceMain implements Runnable {
     public static void main(String args[]) {
 
         ServiceMain program = new ServiceMain();
         int choice = 0;
-
+        program.setUsername();
         while (choice != 4) {
             choice = program.menu();
             switch (choice) {
@@ -27,29 +32,19 @@ public class ServiceMain implements Runnable {
                     program.connectHostSocket();
                     new Thread(program).start();
                     program.sendMessages();
-
-
                     break;
             }
         }
-
-
-
-
     }
 
     private Socket socket;
     private ServerSocket hostSocket;
     private String destinationAddress;
-    private int portNumber = 51638;
-    private String username = "Tester";
+    private int portNumber;
+    private String username;
 
     private InputStream reader;
     private OutputStream writer;
-
-
-    static int soTimeout = 10; //milliseconds - TcpClientSimpleNB.java
-    static int bufferSize = 80;
 
     public int getPortNumber() {
         return portNumber;
@@ -137,16 +132,20 @@ public class ServiceMain implements Runnable {
                 System.out.println("You may now enter your messages...");
                 while (!msg.equals("q")) {
                         msg = kb.nextLine();
+                    if (!msg.equals("q")) {
                         sender.println(username + ": " + msg);
                         sender.flush();
+                    }
                 }
-                sender.close();
             }
         } catch (ClientHasNotConnectedException e) {
             System.out.println("You have not connected to a host");
         } catch (UsernameNotSetException e) {
             System.out.println("You have not set a username");
         }
+        System.out.println("Escape character detected... closing connection to client");
+        System.out.println("Terminating program");
+        System.exit(0);
 
     }
 
@@ -157,10 +156,9 @@ public class ServiceMain implements Runnable {
             } else if (username == null) {
                 throw new UsernameNotSetException();
             } else {
-                PrintWriter sender = new PrintWriter(writer, true);
-                sender.print(username + ": " + msg);
+                PrintWriter sender = new PrintWriter(new OutputStreamWriter(writer), true);
+                sender.println(username + ": " + msg);
                 System.out.println(username + ": " + msg);
-                sender.close();
             }
         } catch (ClientHasNotConnectedException e) {
             System.out.println("You have not connected to a host");
@@ -174,24 +172,24 @@ public class ServiceMain implements Runnable {
             throw new ClientHasNotConnectedException();
         }
         BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
-        String msg = "";
+        String msg;
+        msg = "<>";
         try {
             do {
                 msg = receiver.readLine();
-                if (msg != null || msg.equals("q")) {
-                    System.out.println(msg);
+                if (msg != null) {
+                        System.out.println(msg);
                 } else {
                     throw new ConnectionLostException();
                 }
-            } while (msg != null || msg.equals("q"));
+            } while (msg != null);
         } catch (IOException e) {
             e.printStackTrace();
         }
         catch (ConnectionLostException e) {
-            System.out.println("Connection has been lost... enter q to return to menu...");
-        }
-        if (msg.equals("q")) {
-            System.out.println("Escape character detected... Destination has terminated connection..");
+            System.out.println("Destination has terminated connection...");
+            System.out.println("Program will now terminate...");
+            System.exit(0);
         }
 
     }
@@ -209,7 +207,7 @@ public class ServiceMain implements Runnable {
         System.out.println();
         System.out.println("Options:");
         System.out.println();
-        System.out.println("1. Set Destination Address and IP");
+        System.out.println("1. Set Destination Address and Portnumber");
         System.out.println("2. Connect to another user");
         System.out.println("3. Host another user");
         System.out.println("4. Quit");
@@ -220,11 +218,22 @@ public class ServiceMain implements Runnable {
             try {
                 choice = kb.nextInt();
             } catch (InputMismatchException e) {
+                System.out.println();
                 System.out.println("Usage: 1/2/3/4");
+                break;
             }
-
         }
+        System.out.println();
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println();
         return choice;
+    }
+
+    private void setUsername() {
+        System.out.print("Please Enter your username:");
+        Scanner kb = new Scanner(System.in);
+        username = kb.nextLine();
     }
 
 }

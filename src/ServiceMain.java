@@ -205,6 +205,9 @@ public class ServiceMain implements Runnable {
         System.out.println("----------------------------------------------------------------------");
         System.out.println("----------------------------------------------------------------------");
         System.out.println();
+        System.out.println("Current Destination: " + (destinationAddress == null ? "Not Set": destinationAddress));
+        System.out.println("Current Port Number: " + portNumber);
+        System.out.println();
         System.out.println("Options:");
         System.out.println();
         System.out.println("1. Set Destination Address and Portnumber");

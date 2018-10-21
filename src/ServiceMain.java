@@ -7,10 +7,12 @@ import java.net.SocketTimeoutException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ServiceMain extends Thread {
+public class ServiceMain implements Runnable {
     public static void main(String args[]) {
+
         ServiceMain program = new ServiceMain();
         int choice = 0;
+
         while (choice != 4) {
             choice = program.menu();
             switch (choice) {
@@ -18,11 +20,15 @@ public class ServiceMain extends Thread {
                     program.setPortNumber();
                     break;
                 case 2: program.connectSocket();
+                    new Thread(program).start();
                     program.sendMessages();
                     break;
                 case 3:
                     program.connectHostSocket();
+                    new Thread(program).start();
                     program.sendMessages();
+
+
                     break;
             }
         }
@@ -33,9 +39,10 @@ public class ServiceMain extends Thread {
     }
 
     private Socket socket;
+    private ServerSocket hostSocket;
     private String destinationAddress;
-    private int portNumber;
-    private String username;
+    private int portNumber = 51638;
+    private String username = "Tester";
 
     private InputStream reader;
     private OutputStream writer;
@@ -61,7 +68,7 @@ public class ServiceMain extends Thread {
         Scanner kb = new Scanner(System.in);
         int tempPort = 0;
         while (tempPort < 1023 || tempPort > 65535) {
-            System.out.print("What is the port number of your destination:");
+            System.out.print("What is the port number of your destination: ");
             tempPort = kb.nextInt();
             if (tempPort < 1023 || tempPort > 65535) {
                 System.out.println("Port numbers must be between 1024 and 65535");
@@ -92,7 +99,7 @@ public class ServiceMain extends Thread {
 
     public void connectSocket() {
         if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
-            throw new ClientHasNotConnectedException();
+            throw new IllegalArgumentException();
         }
         try {
             socket = new Socket(destinationAddress, portNumber);
@@ -105,13 +112,15 @@ public class ServiceMain extends Thread {
     }
 
     public void connectHostSocket() {
-        try {
-            ServerSocket hostSocket = new ServerSocket();
-            socket = hostSocket.accept();
-            reader = socket.getInputStream();
-            writer = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (hostSocket == null) {
+            try {
+                hostSocket = new ServerSocket(portNumber);
+                socket = hostSocket.accept();
+                reader = socket.getInputStream();
+                writer = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -124,15 +133,12 @@ public class ServiceMain extends Thread {
             } else {
                 Scanner kb = new Scanner(System.in);
                 String msg = "";
-                PrintWriter sender = new PrintWriter(writer, true);
+                PrintWriter sender = new PrintWriter(new OutputStreamWriter(writer), true);
+                System.out.println("You may now enter your messages...");
                 while (!msg.equals("q")) {
-                    System.out.print("Enter your message:");
-                    if (!msg.equals("q")) {
                         msg = kb.nextLine();
-                        sender.print(username + ": " + msg);
-                        System.out.println(username + ": " + msg);
-                        testConnection();
-                    }
+                        sender.println(username + ": " + msg);
+                        sender.flush();
                 }
                 sender.close();
             }
@@ -140,9 +146,6 @@ public class ServiceMain extends Thread {
             System.out.println("You have not connected to a host");
         } catch (UsernameNotSetException e) {
             System.out.println("You have not set a username");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ConnectionLostException e) {
         }
 
     }
@@ -166,21 +169,36 @@ public class ServiceMain extends Thread {
         }
     }
 
-    private void receiveMessages() {
+    public void receiveMessages() {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }
         BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
+        String msg = "";
         try {
-            while (true) {
-                System.out.println(receiver.readLine());
-            }
+            do {
+                msg = receiver.readLine();
+                if (msg != null || msg.equals("q")) {
+                    System.out.println(msg);
+                } else {
+                    throw new ConnectionLostException();
+                }
+            } while (msg != null || msg.equals("q"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        catch (ConnectionLostException e) {
+            System.out.println("Connection has been lost... enter q to return to menu...");
+        }
+        if (msg.equals("q")) {
+            System.out.println("Escape character detected... Destination has terminated connection..");
+        }
+
     }
 
-    public void run() { receiveMessages();}
+    public void run() {
+            receiveMessages();
+    }
 
     private int menu() {
         Scanner kb = new Scanner(System.in);
@@ -196,8 +214,7 @@ public class ServiceMain extends Thread {
         System.out.println("3. Host another user");
         System.out.println("4. Quit");
         System.out.println();
-        System.out.print("Choose an Option 1/2/3/4: ");
-        while (choice < 1 && choice > 4) {
+        while (choice < 1 || choice > 4) {
             System.out.println();
             System.out.print("Choose an Option 1/2/3/4: ");
             try {
@@ -208,20 +225,6 @@ public class ServiceMain extends Thread {
 
         }
         return choice;
-
     }
-
-    private void testConnection() throws IOException, SocketTimeoutException, ConnectionLostException {
-        int oldTimout = socket.getSoTimeout();
-        socket.setSoTimeout(500);
-        int status = reader.read();
-        if (status == -1) {
-            throw new ConnectionLostException("Connection has been lost");
-        }
-        socket.setSoTimeout(oldTimout);
-    }
-
-
-
 
 }

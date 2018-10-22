@@ -239,4 +239,8 @@ public class ServiceMain implements Runnable {
         username = kb.nextLine();
     }
 
+    public void setUsername(String string) {
+        username = string;
+    }
+
 }

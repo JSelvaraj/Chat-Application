@@ -212,6 +212,62 @@ public class ServiceMain implements Runnable {
         username = kb.nextLine();
     }
 
+    /**
+     * Adapted from http://www.rgagnon.com/javadetails/java-0542.html
+     */
+    public void sendFile() {
+        if (!socket.isConnected()) {
+            throw new ClientHasNotConnectedException();
+        }
+        String directory;
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Please enter the directory/filename of the file you wish to transfer: ");
+        directory = kb.nextLine();
+
+        try {
+            File myFile = new File(directory);
+            byte[] fileByteArray = new byte[(int)myFile.length()];
+            FileInputStream fileReader = new FileInputStream(myFile);
+            BufferedInputStream bufferedFileReader = new BufferedInputStream(fileReader);
+            bufferedFileReader.read(fileByteArray, 0, fileByteArray.length);
+            System.out.println("Sending" + directory + "(" + fileByteArray.length + " bytes)");
+            writer.write(fileByteArray, 0, fileByteArray.length);
+            writer.flush();
+            System.out.println("Complete...");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void receiveFile() {
+        if (!socket.isConnected()) {
+            throw new ClientHasNotConnectedException();
+        }
+        String directory;
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Please enter the directory/filename you wish to save a file to: ");
+        directory = kb.nextLine();
+
+        try {
+            byte[] byteArray = new byte[800000];
+            FileOutputStream fileWriter = new FileOutputStream(directory);
+            BufferedOutputStream bufferedFileWriter = new BufferedOutputStream(fileWriter);
+            int bytesRead = reader.read(byteArray, 0, byteArray.length);
+            int current = bytesRead;
+
+            do {
+                bytesRead = reader.read(byteArray, current, (byteArray.length-current));
+                if (bytesRead >= 0) current += bytesRead;
+            } while (bytesRead > -1);
+
+            bufferedFileWriter.write(byteArray, 0, current);
+            bufferedFileWriter.flush();
+            System.out.println("File " + directory + " downloaded (" + current + " bytes read)");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

@@ -15,20 +15,26 @@ import java.util.Scanner;
 public class ServiceMain implements Runnable {
     public static void main(String args[]) {
 
-        ServiceMain program = new ServiceMain();
+        ServiceMain program;
+        if (args.length == 1) {
+            program = new ServiceMain(args[0]);
+        } else {
+            program = new ServiceMain();
+        }
         int choice = 0;
         program.setUsername();
-        while (choice != 4) {
+        while (choice != 5) {
             choice = program.menu();
             switch (choice) {
                 case 1: program.setDestinationAddress();
-                    program.setPortNumber();
                     break;
-                case 2: program.connectSocket();
+                case 2: program.setPortNumber();
+                    break;
+                case 3: program.connectSocket();
                     new Thread(program).start();
                     program.sendMessages();
                     break;
-                case 3:
+                case 4:
                     program.connectHostSocket();
                     new Thread(program).start();
                     program.sendMessages();
@@ -46,16 +52,12 @@ public class ServiceMain implements Runnable {
     private InputStream reader;
     private OutputStream writer;
 
-    public int getPortNumber() {
-        return portNumber;
+    public ServiceMain() {
+
     }
 
-    public String getDestinationAddress() {
-        return destinationAddress;
-    }
-
-    public Socket getSocket() {
-        return socket;
+    public ServiceMain (String s) {
+        this.destinationAddress = s;
     }
 
     public void setPortNumber() {
@@ -73,23 +75,11 @@ public class ServiceMain implements Runnable {
         portNumber = tempPort;
     }
 
-    public void setPortNumber(int number) throws InvalidPortNumberException {
-        if (number < 1023 || number > 65535) {
-            throw new InvalidPortNumberException();
-        } else {
-            portNumber = number;
-        }
-    }
-
     public void setDestinationAddress() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         System.out.print("Please enter your destination address/IP: ");
         destinationAddress = kb.nextLine();
-    }
-
-    public void setDestinationAddress(String Address) {
-        destinationAddress = Address;
     }
 
     public void connectSocket() {
@@ -149,24 +139,6 @@ public class ServiceMain implements Runnable {
 
     }
 
-    public void sendMessage(String msg){
-        try {
-            if (!socket.isConnected()) {
-                throw new ClientHasNotConnectedException();
-            } else if (username == null) {
-                throw new UsernameNotSetException();
-            } else {
-                PrintWriter sender = new PrintWriter(new OutputStreamWriter(writer), true);
-                sender.println(username + ": " + msg);
-                System.out.println(username + ": " + msg);
-            }
-        } catch (ClientHasNotConnectedException e) {
-            System.out.println("You have not connected to a host");
-        } catch (UsernameNotSetException e) {
-            System.out.println("You have not set a username");
-        }
-    }
-
     public void receiveMessages() {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
@@ -210,19 +182,20 @@ public class ServiceMain implements Runnable {
         System.out.println();
         System.out.println("Options:");
         System.out.println();
-        System.out.println("1. Set Destination Address and Portnumber");
-        System.out.println("2. Connect to another user");
-        System.out.println("3. Host another user");
-        System.out.println("4. Quit");
+        System.out.println("1. Set Destination Address");
+        System.out.println("2. Set Port Number");
+        System.out.println("3. Connect to another user");
+        System.out.println("4. Host another user");
+        System.out.println("5. Quit");
         System.out.println();
         while (choice < 1 || choice > 4) {
             System.out.println();
-            System.out.print("Choose an Option 1/2/3/4: ");
+            System.out.print("Choose an Option 1/2/3/4/5: ");
             try {
                 choice = kb.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println();
-                System.out.println("Usage: 1/2/3/4");
+                System.out.println("Usage: 1/2/3/4/5");
                 break;
             }
         }
@@ -238,5 +211,7 @@ public class ServiceMain implements Runnable {
         Scanner kb = new Scanner(System.in);
         username = kb.nextLine();
     }
+
+
 
 }

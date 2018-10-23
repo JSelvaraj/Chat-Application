@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5fc1fec-924a-47cd-85f2-82d34b7b2e53" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/common/InvalidSocketAddressException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/ServiceMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Mini-Project-1/ServiceMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/Tests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/common/InvalidPortNumberException.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ServiceMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ServiceMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/InvalidPortNumberException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/InvalidPortNumberException.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,12 +23,12 @@
     <session id="2087017599">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.11" value="1" />
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.11" value="3" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -40,12 +47,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="5229" />
+          <entry key="java" value="7681" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="5229" />
+          <entry key="JAVA" value="7681" />
         </counts>
       </usages-collector>
     </session>
@@ -86,44 +93,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1133">
-              <caret line="269" lean-forward="true" selection-start-line="269" selection-end-line="269" />
+            <state relative-caret-position="533">
+              <caret line="123" column="4" selection-start-line="123" selection-start-column="4" selection-end-line="123" selection-end-column="4" />
               <folding>
                 <element signature="method#ServiceMain#0;class#ServiceMain#0" />
                 <element signature="method#setPortNumber#0;class#ServiceMain#0" />
-                <element signature="method#setDestinationAddress#0;class#ServiceMain#0" />
-                <element signature="method#connectSocket#0;class#ServiceMain#0" />
-                <element signature="method#connectHostSocket#0;class#ServiceMain#0" />
+                <element signature="docComment;method#sendMessages#0;class#ServiceMain#0" />
                 <element signature="method#sendMessages#0;class#ServiceMain#0" />
-                <element signature="method#receiveMessages#0;class#ServiceMain#0" />
-                <element signature="method#menu#0;class#ServiceMain#0" />
-                <element signature="method#setUsername#0;class#ServiceMain#0" />
+                <element signature="e#5864#5865#0" expanded="true" />
+                <element signature="e#5901#5902#0" expanded="true" />
+                <element signature="method#receiveFile#0;class#ServiceMain#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="uml://JAVA/">
-          <provider selected="true" editor-type-id="UmlEditorProvider">
-            <state>
-              <ID>JAVA</ID>
-              <OriginalElement />
-              <nodes>
-                <node x="327.0" y="0.0">Multicast</node>
-                <node x="0.0" y="0.0">ServiceMain</node>
-              </nodes>
-              <notes />
-              <edges />
-              <settings layout="Hierarchic Group" zoom="1.0" x="50.0" y="-86.0" />
-              <SelectedNodes />
-              <Categories>
-                <Category>Fields</Category>
-                <Category>Methods</Category>
-                <Category>Constructors</Category>
-              </Categories>
-              <SCOPE>All</SCOPE>
-              <VISIBILITY>private</VISIBILITY>
             </state>
           </provider>
         </entry>
@@ -131,7 +111,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Multicast.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
+            <state relative-caret-position="51">
               <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -152,17 +132,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/common/ClientHasNotConnectedException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="68" selection-start-line="2" selection-start-column="68" selection-end-line="2" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/common/InvalidPortNumberException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="57" selection-start-line="2" selection-start-column="57" selection-end-line="2" selection-end-column="57" />
+            <state relative-caret-position="68">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
@@ -177,6 +148,14 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>setUserna</find>
+      <find>setUsername</find>
+      <find>setPort</find>
+      <find>public</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -186,7 +165,6 @@
       <list>
         <option value="$PROJECT_DIR$/common/src/InvalidPortNumberException.java" />
         <option value="$PROJECT_DIR$/src/ClientTest.java" />
-        <option value="$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
         <option value="$PROJECT_DIR$/src/common/ClientHasNotConnected.java" />
         <option value="$PROJECT_DIR$/src/TcpServerSimpleNB.java" />
         <option value="$PROJECT_DIR$/src/common/UsernameNotSetException.java" />
@@ -196,6 +174,7 @@
         <option value="$PROJECT_DIR$/src/Server.java" />
         <option value="$PROJECT_DIR$/src/Multicast.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
         <option value="$PROJECT_DIR$/src/ServiceMain.java" />
       </list>
     </option>
@@ -207,8 +186,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1273" />
-    <option name="width" value="1294" />
+    <option name="x" value="-7" />
+    <option name="width" value="1244" />
     <option name="height" value="1407" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -252,6 +231,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -264,12 +244,17 @@
               <item name="Mini-Project-1" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Mini-Project-1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Mini-Project-1" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -279,7 +264,7 @@
     <property name="SearchEverywhereHistoryKey" value="sout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540237023187" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540329664255" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -338,17 +323,18 @@
       <workItem from="1539943041366" duration="3402000" />
       <workItem from="1539954802644" duration="14469000" />
       <workItem from="1540052234354" duration="3288000" />
+      <workItem from="1540312537887" duration="8152000" />
+      <workItem from="1540326490923" duration="3170000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28877000" />
+    <option name="totallyTimeSpent" value="40799000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1273" y="0" width="1294" height="1407" extended-state="0" />
-    <editor active="true" />
+    <frame x="-7" y="0" width="1244" height="1407" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2512275" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2738908" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -356,9 +342,9 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.329582" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.41360295" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.329582" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3995177" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -391,15 +377,21 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
-          <line>13</line>
+          <line>59</line>
           <properties />
-          <option name="timeStamp" value="2" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
-          <line>11</line>
+          <line>100</line>
           <properties />
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
+          <line>132</line>
+          <properties />
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -433,57 +425,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TcpServerSimpleNB.java" />
-    <entry file="file://$PROJECT_DIR$/src/common/ClientHasNotConnectedException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="68" selection-start-line="2" selection-start-column="68" selection-end-line="2" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/common/InvalidPortNumberException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="57" selection-start-line="2" selection-start-column="57" selection-end-line="2" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/common/ConnectionLostException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="1" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ClientDelegate.java" />
     <entry file="file://$PROJECT_DIR$/src/ClientForm.form" />
-    <entry file="file://$PROJECT_DIR$/src/Tests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="17" lean-forward="true" selection-start-column="17" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="42" column="5" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#419#420#0" expanded="true" />
-            <element signature="e#470#471#0" expanded="true" />
-            <element signature="method#setPortNumber#0;class#Client#0" />
-            <element signature="method#setDestinationAddress#0;class#Client#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tests.java" />
+    <entry file="file://$PROJECT_DIR$/src/Server.java" />
+    <entry file="file://$PROJECT_DIR$/src/Client.java" />
     <entry file="uml://JAVA/">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -499,17 +445,34 @@
           <SelectedNodes />
           <Categories>
             <Category>Fields</Category>
-            <Category>Methods</Category>
             <Category>Constructors</Category>
+            <Category>Methods</Category>
           </Categories>
           <SCOPE>All</SCOPE>
           <VISIBILITY>private</VISIBILITY>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
+    <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="533">
+          <caret line="123" column="4" selection-start-line="123" selection-start-column="4" selection-end-line="123" selection-end-column="4" />
+          <folding>
+            <element signature="method#ServiceMain#0;class#ServiceMain#0" />
+            <element signature="method#setPortNumber#0;class#ServiceMain#0" />
+            <element signature="docComment;method#sendMessages#0;class#ServiceMain#0" />
+            <element signature="method#sendMessages#0;class#ServiceMain#0" />
+            <element signature="e#5864#5865#0" expanded="true" />
+            <element signature="e#5901#5902#0" expanded="true" />
+            <element signature="method#receiveFile#0;class#ServiceMain#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Multicast.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
+        <state relative-caret-position="51">
           <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -517,21 +480,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
+    <entry file="file://$PROJECT_DIR$/src/common/ConnectionLostException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1133">
-          <caret line="269" lean-forward="true" selection-start-line="269" selection-end-line="269" />
-          <folding>
-            <element signature="method#ServiceMain#0;class#ServiceMain#0" />
-            <element signature="method#setPortNumber#0;class#ServiceMain#0" />
-            <element signature="method#setDestinationAddress#0;class#ServiceMain#0" />
-            <element signature="method#connectSocket#0;class#ServiceMain#0" />
-            <element signature="method#connectHostSocket#0;class#ServiceMain#0" />
-            <element signature="method#sendMessages#0;class#ServiceMain#0" />
-            <element signature="method#receiveMessages#0;class#ServiceMain#0" />
-            <element signature="method#menu#0;class#ServiceMain#0" />
-            <element signature="method#setUsername#0;class#ServiceMain#0" />
-          </folding>
+        <state relative-caret-position="51">
+          <caret line="3" column="1" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/ClientHasNotConnectedException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>

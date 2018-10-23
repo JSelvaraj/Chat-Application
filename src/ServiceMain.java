@@ -8,9 +8,8 @@ import java.util.Scanner;
 
 /**
  * Resources
- *  - https://www.baeldung.com/java-thread-stop
+ *
  */
-
 
 public class ServiceMain implements Runnable {
     public static void main(String args[]) {
@@ -52,15 +51,18 @@ public class ServiceMain implements Runnable {
     private InputStream reader;
     private OutputStream writer;
 
-    public ServiceMain() {
+    private ServiceMain() {
 
     }
 
-    public ServiceMain (String s) {
+    private ServiceMain (String s) {
         this.destinationAddress = s;
     }
 
-    public void setPortNumber() {
+    /**
+     * Gets a port number from the user. Also does some basic checks to ensure it's acceptable.
+     */
+    private void setPortNumber() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         int tempPort = 0;
@@ -75,28 +77,38 @@ public class ServiceMain implements Runnable {
         portNumber = tempPort;
     }
 
-    public void setDestinationAddress() {
+    /** Gets a destination address from the user.*/
+    private void setDestinationAddress() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         System.out.print("Please enter your destination address/IP: ");
         destinationAddress = kb.nextLine();
     }
 
-    public void connectSocket() {
-        if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
-            throw new IllegalArgumentException();
-        }
+    /**
+     * Attempts to connect to a socket and get an input and output stream.
+     */
+    private void connectSocket(){
         try {
+            if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
+                throw new InvalidSocketAddressException();
+            }
             socket = new Socket(destinationAddress, portNumber);
             //socket.setSoTimeout(soTimeout);
             reader = socket.getInputStream();
             writer = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InvalidSocketAddressException e) {
+            System.out.println("Destination address and/or port number have are not valid.");
         }
     }
 
-    public void connectHostSocket() {
+
+    /**
+     * Waits for a connection from another user and obtains input and output streams from that connection.
+     */
+    private void connectHostSocket() {
         if (hostSocket == null) {
             try {
                 hostSocket = new ServerSocket(portNumber);
@@ -109,9 +121,16 @@ public class ServiceMain implements Runnable {
         }
     }
 
-    public void sendMessages(){
+    /**
+     * First this checks that the socket has some connections and that a username has been set.
+     * Then gets input from the user's keyboard. Then it sends the username + the message to the connected
+     * computer.
+     * If the character 'q' is sent it means the user has finished sending messages.
+     * at that time the user is informed and the program will exit..
+     */
+    private void sendMessages(){
         try {
-            if (!socket.isConnected()) {
+            if (socket == null) {
                 throw new ClientHasNotConnectedException();
             } else if (username == null) {
                 throw new UsernameNotSetException();
@@ -128,25 +147,24 @@ public class ServiceMain implements Runnable {
                     }
                 }
             }
+            System.out.println("Escape character detected... closing connection to client");
+            System.out.println("Terminating program");
+            System.exit(0);
         } catch (ClientHasNotConnectedException e) {
             System.out.println("You have not connected to a host");
         } catch (UsernameNotSetException e) {
             System.out.println("You have not set a username");
         }
-        System.out.println("Escape character detected... closing connection to client");
-        System.out.println("Terminating program");
-        System.exit(0);
-
     }
 
-    public void receiveMessages() {
-        if (!socket.isConnected()) {
-            throw new ClientHasNotConnectedException();
-        }
-        BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
-        String msg;
-        msg = "<>";
+    private void receiveMessages() {
         try {
+            if (socket == null) {
+                throw new ClientHasNotConnectedException();
+            }
+            BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
+            String msg;
+            msg = "<>";
             do {
                 msg = receiver.readLine();
                 if (msg != null) {
@@ -215,7 +233,7 @@ public class ServiceMain implements Runnable {
     /**
      * Adapted from http://www.rgagnon.com/javadetails/java-0542.html
      */
-    public void sendFile() {
+    private void sendFile() {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }
@@ -239,7 +257,7 @@ public class ServiceMain implements Runnable {
         }
     }
 
-    public void receiveFile() {
+    private void receiveFile() {
         if (!socket.isConnected()) {
             throw new ClientHasNotConnectedException();
         }

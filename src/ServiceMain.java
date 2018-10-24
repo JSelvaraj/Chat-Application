@@ -21,8 +21,8 @@ public class ServiceMain implements Runnable {
             program = new ServiceMain();
         }
         int choice = 0;
-        program.setUsername();
-        while (choice != 5) {
+//        program.setUsername();
+        while (choice != 7) {
             choice = program.menu();
             switch (choice) {
                 case 1: program.setDestinationAddress();
@@ -38,18 +38,23 @@ public class ServiceMain implements Runnable {
                     new Thread(program).start();
                     program.sendMessages();
                     break;
+                case 5:
+                    program.connectSocket();
+                    program.sendFile();
+                    break;
+                case 6:
+                    program.connectHostSocket();
+                    program.receiveFile();
+                    break;
             }
         }
     }
 
     private Socket socket;
     private ServerSocket hostSocket;
-    private String destinationAddress;
-    private int portNumber;
+    private String destinationAddress = "127.0.0.1";
+    private int portNumber = 51638;
     private String username;
-
-    private InputStream reader;
-    private OutputStream writer;
 
     private ServiceMain() {
 
@@ -93,10 +98,9 @@ public class ServiceMain implements Runnable {
             if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
                 throw new InvalidSocketAddressException();
             }
+            System.out.println("Searching for server...");
             socket = new Socket(destinationAddress, portNumber);
-            //socket.setSoTimeout(soTimeout);
-            reader = socket.getInputStream();
-            writer = socket.getOutputStream();
+            System.out.println("Server found...");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidSocketAddressException e) {
@@ -112,9 +116,9 @@ public class ServiceMain implements Runnable {
         if (hostSocket == null) {
             try {
                 hostSocket = new ServerSocket(portNumber);
+                System.out.println("Waiting for client to connect...");
                 socket = hostSocket.accept();
-                reader = socket.getInputStream();
-                writer = socket.getOutputStream();
+                System.out.println("Client found....");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -137,7 +141,7 @@ public class ServiceMain implements Runnable {
             } else {
                 Scanner kb = new Scanner(System.in);
                 String msg = "";
-                PrintWriter sender = new PrintWriter(new OutputStreamWriter(writer), true);
+                PrintWriter sender = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
                 System.out.println("You may now enter your messages...");
                 while (!msg.equals("q")) {
                         msg = kb.nextLine();
@@ -154,6 +158,8 @@ public class ServiceMain implements Runnable {
             System.out.println("You have not connected to a host");
         } catch (UsernameNotSetException e) {
             System.out.println("You have not set a username");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -162,7 +168,7 @@ public class ServiceMain implements Runnable {
             if (socket == null) {
                 throw new ClientHasNotConnectedException();
             }
-            BufferedReader receiver = new BufferedReader(new InputStreamReader(reader));
+            BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg;
             msg = "<>";
             do {
@@ -204,16 +210,18 @@ public class ServiceMain implements Runnable {
         System.out.println("2. Set Port Number");
         System.out.println("3. Connect to another user");
         System.out.println("4. Host another user");
+        System.out.println("5. Send a file.");
+        System.out.println("6. Receive a file");
         System.out.println("5. Quit");
         System.out.println();
-        while (choice < 1 || choice > 4) {
+        while (choice < 1 || choice > 7) {
             System.out.println();
-            System.out.print("Choose an Option 1/2/3/4/5: ");
+            System.out.print("Choose an Option: ");
             try {
                 choice = kb.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println();
-                System.out.println("Usage: 1/2/3/4/5");
+                System.out.println("Usage: 1-7");
                 break;
             }
         }
@@ -225,65 +233,79 @@ public class ServiceMain implements Runnable {
     }
 
     private void setUsername() {
-        System.out.print("Please Enter your username:");
+        System.out.print("Please Enter your username: ");
         Scanner kb = new Scanner(System.in);
         username = kb.nextLine();
     }
 
     /**
-     * Adapted from http://www.rgagnon.com/javadetails/java-0542.html
+     * Adapted from https://gist.github.com/CarlEkerot/2693246
      */
     private void sendFile() {
-        if (!socket.isConnected()) {
-            throw new ClientHasNotConnectedException();
-        }
-        String directory;
-        Scanner kb = new Scanner(System.in);
-        System.out.print("Please enter the directory/filename of the file you wish to transfer: ");
-        directory = kb.nextLine();
-
         try {
-            File myFile = new File(directory);
-            byte[] fileByteArray = new byte[(int)myFile.length()];
-            FileInputStream fileReader = new FileInputStream(myFile);
-            BufferedInputStream bufferedFileReader = new BufferedInputStream(fileReader);
-            bufferedFileReader.read(fileByteArray, 0, fileByteArray.length);
-            System.out.println("Sending" + directory + "(" + fileByteArray.length + " bytes)");
-            writer.write(fileByteArray, 0, fileByteArray.length);
-            writer.flush();
-            System.out.println("Complete...");
+            if (socket == null) {
+                throw new ClientHasNotConnectedException();
+            }
+            Scanner kb = new Scanner(System.in);
+            System.out.print("Enter the directory+name of the file you want to transfer: ");
+            String fileName = kb.nextLine();
+            File myFile = new File(fileName);
+            FileInputStream fis = new FileInputStream(myFile);
+            byte[] buffer = new byte[4096];
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(myFile.getName().length());
+            dos.writeChars(myFile.getName());
+
+            dos.writeLong(myFile.length()); //sends the size of the file.
+
+            while (fis.read(buffer) > 0) {
+                dos.write(buffer);
+            }
+            System.out.println("File has been sent...");
+            System.out.println("Program will now terminate...");
+            fis.close();
+            dos.close();
+            System.exit(0);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void receiveFile() {
-        if (!socket.isConnected()) {
-            throw new ClientHasNotConnectedException();
-        }
-        String directory;
-        Scanner kb = new Scanner(System.in);
-        System.out.print("Please enter the directory/filename you wish to save a file to: ");
-        directory = kb.nextLine();
-
         try {
-            byte[] byteArray = new byte[800000];
-            FileOutputStream fileWriter = new FileOutputStream(directory);
-            BufferedOutputStream bufferedFileWriter = new BufferedOutputStream(fileWriter);
-            int bytesRead = reader.read(byteArray, 0, byteArray.length);
-            int current = bytesRead;
+            if (socket == null) {
+                throw new ClientHasNotConnectedException();
+            }
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            char[] fileName = new char[dis.readInt()];
+            for (int i = 0; i < fileName.length; i++) {
+                fileName[i] = dis.readChar();
+            }
+            String file = new String(fileName);
+            FileOutputStream fos = new FileOutputStream(file);
 
-            do {
-                bytesRead = reader.read(byteArray, current, (byteArray.length-current));
-                if (bytesRead >= 0) current += bytesRead;
-            } while (bytesRead > -1);
+            long size = 0;
+            size = dis.readLong();
 
-            bufferedFileWriter.write(byteArray, 0, current);
-            bufferedFileWriter.flush();
-            System.out.println("File " + directory + " downloaded (" + current + " bytes read)");
+            byte[] buffer = new byte[4096];
+            int read = 0;
+            int position = 0;
+            int remaining = (int) size - read;
+            while ((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0){
+                position += read;
+                remaining -= read;
+                fos.write(buffer, 0, read);
+            }
+            dis.close();
+            fos.close();
+            System.out.println("File successfully received...");
+            System.out.println("Program will now terminate...");
+            System.exit(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 

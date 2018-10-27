@@ -62,6 +62,9 @@ public class ServiceMain implements Runnable {
     private int portNumber = 51638;
     private String username;
 
+    boolean receiveMessagesThreadFlag = false;
+    boolean sendMessagesThreadFlag = false;
+
     public ServiceMain() {
 
     }
@@ -151,6 +154,7 @@ public class ServiceMain implements Runnable {
      * at that time the user is informed and the program will exit..
      */
     private void sendMessages() {
+        sendMessagesThreadFlag = true;
         try {
             if (socket == null) {
                 System.out.println("You have not connected to a host...");
@@ -169,11 +173,11 @@ public class ServiceMain implements Runnable {
                 } while (!msg.equals(ESCAPE_CHARACTER));
             }
             System.out.println("Escape character detected... closing connection to client");
-            System.out.println("Terminating program");
-            System.exit(0);
+            System.out.println("Returning to menu...");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sendMessagesThreadFlag = true;
     }
 
     /**

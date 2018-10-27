@@ -169,15 +169,14 @@ public class ServiceMain implements Runnable {
 
                     sender.println(username + ": " + msg);
                     sender.flush();
-
-                } while (!msg.equals(ESCAPE_CHARACTER));
+                } while (!msg.equals(ESCAPE_CHARACTER) && receiveMessagesThreadFlag);
             }
             System.out.println("Escape character detected... closing connection to client");
             System.out.println("Returning to menu...");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sendMessagesThreadFlag = true;
+        sendMessagesThreadFlag = false;
     }
 
     /**
@@ -198,6 +197,7 @@ public class ServiceMain implements Runnable {
      * and the method throws an exception and exits.
      */
     private void receiveMessages() {
+        receiveMessagesThreadFlag = true;
         try {
             BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg;
@@ -208,18 +208,16 @@ public class ServiceMain implements Runnable {
                     System.out.println(msg);
                 } else if (msg == null)  {
                     System.out.println("Destination has terminated connection...");
-                    System.out.println("Program will now terminate...");
-                    System.exit(-1);
+                    System.out.println("Returning to menu...");
+                    System.out.println("Press enter to return to menu...");
                 }
-            } while (!extractMsg(msg).equals(ESCAPE_CHARACTER));
+            } while (!extractMsg(msg).equals(ESCAPE_CHARACTER) && sendMessagesThreadFlag);
             System.out.println("Escape Character Detected....");
             System.out.println("Other terminal has terminated connection...");
-            System.out.println("Program will now shut down...");
-            System.exit(0);
         } catch (IOException e) {
             System.out.println("Socket has not been connected...");
         }
-
+        receiveMessagesThreadFlag = false;
     }
 
     public void run() {
@@ -364,6 +362,15 @@ public class ServiceMain implements Runnable {
             fileName[i] = dis.readChar();
         }
         return new String(fileName);
+    }
+    private void closeSocket() {
+        while (receiveMessagesThreadFlag || sendMessagesThreadFlag) {
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

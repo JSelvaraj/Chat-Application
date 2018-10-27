@@ -35,11 +35,13 @@ public class ServiceMain implements Runnable {
                     program.connectSocket();
                     new Thread(program).start();
                     program.sendMessages();
+                    program.closeSocket();
                     break;
                 case 4:
                     program.connectHostSocket();
                     new Thread(program).start();
                     program.sendMessages();
+                    program.closeSocket();
                     break;
                 case 5:
                     program.connectSocket();

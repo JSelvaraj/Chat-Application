@@ -32,24 +32,42 @@ public class ServiceMain implements Runnable {
                     program.setPortNumber();
                     break;
                 case 3:
-                    program.connectSocket();
-                    new Thread(program).start();
-                    program.sendMessages();
-                    program.closeSocket();
+                    try {
+                        program.connectSocket();
+                        new Thread(program).start();
+                        program.sendMessages();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Invalid Address, please check your destination before trying again...");
+                    }
                     break;
                 case 4:
-                    program.connectHostSocket();
-                    new Thread(program).start();
-                    program.sendMessages();
-                    program.closeSocket();
+                    try {
+                        program.connectHostSocket();
+                        new Thread(program).start();
+                        program.sendMessages();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Server Socket Timed out...");
+                        System.out.println("Returning to menu...");
+                    }
                     break;
                 case 5:
-                    program.connectSocket();
-                    program.sendFile();
+                    try {
+                        program.connectSocket();
+                        program.sendFile();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Invalid Address, please check your destination before trying again...");
+                    }
                     break;
                 case 6:
-                    program.connectHostSocket();
-                    program.receiveFile();
+                    try {
+                        program.connectHostSocket();
+                        program.receiveFile();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Server Socket Timed out...");
+                        System.out.println("Returning to menu...");
+                    }
                     break;
             }
         }
@@ -110,9 +128,9 @@ public class ServiceMain implements Runnable {
     /**
      * Attempts to connect to a socket and get an input and output stream.
      */
-    private void connectSocket() {
+    private void connectSocket() throws ClientHasNotConnectedException {
         int i = 0;
-        while (i < 4 && socket == null) {
+        while (socket == null || socket.isClosed()) {
             try {
                 if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
                     throw new InvalidSocketAddressException();
@@ -123,6 +141,9 @@ public class ServiceMain implements Runnable {
             } catch (IOException e) {
                 System.out.println("Server not found... Retrying...");
                 i++;
+                if (i == 4) {
+                    throw new ClientHasNotConnectedException();
+                }
             } catch (InvalidSocketAddressException e) {
                 System.out.println("Destination address and/or port number have are not valid.");
             }
@@ -133,18 +154,15 @@ public class ServiceMain implements Runnable {
     /**
      * Waits for a connection from another user and obtains input and output streams from that connection.
      */
-    private void connectHostSocket() {
-        if (hostSocket == null) {
-            try {
-                hostSocket = new ServerSocket(portNumber);
-                hostSocket.setSoTimeout(HOST_SO_TIMEOUT);
-                System.out.println("Waiting for client to connect...");
-                socket = hostSocket.accept();
-                System.out.println("Client found....");
-            } catch (IOException e) {
-                System.out.println("Server Socket Timed out...");
-                System.out.println("Returning to menu...");
-            }
+    private void connectHostSocket() throws ClientHasNotConnectedException {
+        try {
+            hostSocket = new ServerSocket(portNumber);
+            hostSocket.setSoTimeout(HOST_SO_TIMEOUT);
+            System.out.println("Waiting for client to connect...");
+            socket = hostSocket.accept();
+            System.out.println("Client found....");
+        } catch (IOException e) {
+            throw new ClientHasNotConnectedException();
         }
     }
 
@@ -168,17 +186,24 @@ public class ServiceMain implements Runnable {
                 System.out.println("You may now enter your messages...");
                 do  {
                     msg = kb.nextLine();
-
-                    sender.println(username + ": " + msg);
-                    sender.flush();
+                    if (msg.length() > 0) {
+                        sender.println(username + ": " + msg);
+                        sender.flush();
+                    }
                 } while (!msg.equals(ESCAPE_CHARACTER) && receiveMessagesThreadFlag);
+                if (msg.equals(ESCAPE_CHARACTER) ) {
+                    System.out.println("Escape character detected... closing connection to client");
+                    System.out.println("Returning to menu...");
+                } else {
+                    System.out.println();
+                }
             }
-            System.out.println("Escape character detected... closing connection to client");
-            System.out.println("Returning to menu...");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         sendMessagesThreadFlag = false;
+        System.out.println("flag change sending");
     }
 
     /**
@@ -205,17 +230,22 @@ public class ServiceMain implements Runnable {
             String msg;
             msg = "<>";
             do {
-                msg = receiver.readLine();
-                if (msg != null && !extractMsg(msg).equals(ESCAPE_CHARACTER)) {
-                    System.out.println(msg);
-                } else if (msg == null)  {
-                    System.out.println("Destination has terminated connection...");
-                    System.out.println("Returning to menu...");
-                    System.out.println("Press enter to return to menu...");
+                while (receiver.ready()) {
+                    msg = receiver.readLine();
+                    if (msg != null && !extractMsg(msg).equals(ESCAPE_CHARACTER)) {
+                        System.out.println(msg);
+                    } else if (msg == null)  {
+                        System.out.println("Destination has terminated connection...");
+                        System.out.println("Returning to menu...");
+                        System.out.println("Press enter to return to menu...");
+                    }
                 }
             } while (!extractMsg(msg).equals(ESCAPE_CHARACTER) && sendMessagesThreadFlag);
-            System.out.println("Escape Character Detected....");
-            System.out.println("Other terminal has terminated connection...");
+            if (extractMsg(msg).equals(ESCAPE_CHARACTER)) {
+                System.out.println("Escape Character Detected....");
+                System.out.println("Other terminal has terminated connection...");
+                System.out.println("Press enter twice to return to menu...");
+            }
         } catch (IOException e) {
             System.out.println("Socket has not been connected...");
         }
@@ -370,6 +400,11 @@ public class ServiceMain implements Runnable {
         }
         try {
             socket.close();
+            socket = null;
+            if (hostSocket != null) {
+                hostSocket.close();
+                hostSocket = null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

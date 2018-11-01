@@ -9,10 +9,10 @@ import java.util.Scanner;
 
 public class ConnectionHandler {
 
-    private static final int MAX_CONNECTION_ATTEMPTS = 4;
-    private static final int SO_TIMEOUT = 10000;
+    private static final int MAX_CONNECTION_ATTEMPTS = 4; //Maximum times a socket will try to connect to a host.
+    private static final int SO_TIMEOUT = 10000; // How long before a ServerSocket will stop listening(ms).
 
-    private String destinationAddress = "127.0.0.1";
+    private String destinationAddress;
     private int portNumber = 51638;
     private Socket socket;
     private ServerSocket hostSocket;
@@ -106,6 +106,7 @@ public class ConnectionHandler {
             System.out.println("Client found....");
             return socket;
         } catch (IOException e) {
+            closeSockets();
             throw new ClientHasNotConnectedException();
         }
     }

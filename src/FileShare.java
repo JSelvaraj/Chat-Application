@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 public class FileShare  {
 
-    public FileShare() {
+    private Socket socket;
 
+    public FileShare(Socket socket) {
+        this.socket = socket;
     }
 
     /**
@@ -19,7 +21,7 @@ public class FileShare  {
      * 4. It sends the file over the filestream.
      *
      */
-    public void sendFile(Socket socket) {
+    public void sendFile() {
         try {
             File myFile = null;
             FileInputStream fis = null;
@@ -27,7 +29,7 @@ public class FileShare  {
             do {
                 try {
                     Scanner kb = new Scanner(System.in);
-                    System.out.print("Enter the directory+name of the file you want to transfer: ");
+                    System.out.print("Enter the directory + name of the file you want to transfer: ");
                     String fileName = kb.nextLine();
                     myFile = new File(fileName);
                     fis = new FileInputStream(myFile);
@@ -47,7 +49,7 @@ public class FileShare  {
             dos.writeInt(myFile.getName().length());
             dos.writeChars(myFile.getName());
 
-            dos.writeLong(myFile.length()); //sends the size of the file.
+            dos.writeLong(myFile.length());
 
             while (fis.read(buffer) > 0) {
                 dos.write(buffer);
@@ -60,6 +62,8 @@ public class FileShare  {
     }
 
     /**
+     * Adapted from https://gist.github.com/CarlEkerot/2693246
+     *
      * This method uses a bytestream to receive a file from another terminal. It first creates a FileOutputStream that
      * uses the helper function getFileName.
      * Then it follows the protocol:
@@ -67,9 +71,9 @@ public class FileShare  {
      * 2. Reads the inputstream for the length specified above, creating a new file at $PROGRAM DIRECTORY/src/<filename>
      *
      */
-    public void receiveFile(Socket socket) {
+    public void receiveFile() {
         try {
-            FileOutputStream fos = new FileOutputStream(getFileName(socket));
+            FileOutputStream fos = new FileOutputStream(getFileName());
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             long size = 0;
             size = dis.readLong();
@@ -99,7 +103,7 @@ public class FileShare  {
      * @return filename - a String containing the filename of the file being sent.
      * @throws IOException If something interrupts the stream.
      */
-    private String getFileName(Socket socket) throws IOException {
+    private String getFileName() throws IOException {
 
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         char[] fileName = new char[dis.readInt()];

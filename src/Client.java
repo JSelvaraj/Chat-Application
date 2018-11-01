@@ -10,7 +10,7 @@ public class Client implements Runnable{
     private static final String ESCAPE_CHARACTER = "q";
 
 
-    private String username = "unknown";
+    private String username;
     private Socket socket;
 
     private boolean receiveMessagesThreadFlag = false;
@@ -22,17 +22,9 @@ public class Client implements Runnable{
         this.socket = socket;
     }
 
-
-    public Client() {
-    }
-
-
     /**
-     * First this checks that the socket has some connections and that a username has been set.
-     * Then gets input from the user's keyboard. Then it sends the username + the message to the connected
-     * computer.
-     * If the character 'q' is sent it means the user has finished sending messages.
-     * at that time the user is informed and the program will exit..
+     * This takes in input from the user's keyboard and outputs it to the outputstream of the current socket.
+     * It continuously takes input until the escape character is sent or until the receiveMessages method closes.
      */
     public void sendMessages() {
         sendMessagesThreadFlag = true;
@@ -53,12 +45,11 @@ public class Client implements Runnable{
             } else {
                 System.out.println();
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         sendMessagesThreadFlag = false;
+        synchronizer();
     }
 
     /**
@@ -99,10 +90,25 @@ public class Client implements Runnable{
             }
         } catch (IOException e) {
             System.out.println("Connection has been terminated");
+            System.out.println("Press enter twice to return to menu...");
         }
         receiveMessagesThreadFlag = false;
+        synchronizer();
     }
 
+    private void synchronizer() {
+        try {
+            while (sendMessagesThreadFlag || receiveMessagesThreadFlag) {
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The method required by the Runnable interface.
+     */
     public void run() {
         receiveMessages(socket);
     }

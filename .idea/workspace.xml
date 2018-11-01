@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f5fc1fec-924a-47cd-85f2-82d34b7b2e53" name="Default Changelist" comment="" />
+    <list default="true" id="f5fc1fec-924a-47cd-85f2-82d34b7b2e53" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,10 +62,12 @@
         <counts>
           <entry key="JAVA/" value="1" />
           <entry key="MODULES/mdl-Mini-Project-1" value="1" />
+          <entry key="java" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="JAVA" value="2" />
           <entry key="UML" value="2" />
         </counts>
       </usages-collector>
@@ -90,7 +94,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="uml://JAVA/">
           <provider selected="true" editor-type-id="UmlEditorProvider">
             <state>
@@ -98,21 +102,23 @@
               <OriginalElement />
               <nodes>
                 <node x="16.0" y="432.0">Server</node>
-                <node x="306.09765625" y="234.3984375">FileShare</node>
+                <node x="573.0" y="573.0">src</node>
+                <node x="0.0" y="573.0">FileShare</node>
+                <node x="432.0" y="573.0">out</node>
                 <node x="307.0" y="0.0">ConnectionHandler</node>
-                <node x="306.64453125" y="393.36328125">ServiceMain</node>
-                <node x="3.2109375" y="8.02734375">Client</node>
+                <node x="222.0" y="573.0">ServiceMain</node>
+                <node x="0.0" y="0.0">Client</node>
               </nodes>
               <notes />
               <edges>
                 <edge source="Server" target="Client">
-                  <point x="0.0" y="-81.0" />
+                  <point x="0.0" y="-48.0" />
                   <point x="0.0" y="191.0" />
                 </edge>
               </edges>
-              <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="395.697265625" y="422.306640625" />
+              <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="-33.765625" y="365.3125" />
               <SelectedNodes>
-                <node>Client</node>
+                <node>ServiceMain</node>
               </SelectedNodes>
               <Categories>
                 <Category>Fields</Category>
@@ -121,6 +127,15 @@
               </Categories>
               <SCOPE>All</SCOPE>
               <VISIBILITY>private</VISIBILITY>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -267,7 +282,7 @@
     <property name="SearchEverywhereHistoryKey" value="sout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541089448960" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541095098981" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -333,7 +348,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45733000" />
+    <option name="totallyTimeSpent" value="47142000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-5" y="8" width="1291" height="731" extended-state="0" />
@@ -434,40 +449,6 @@
     <entry file="file://$PROJECT_DIR$/src/ClientForm.form" />
     <entry file="file://$PROJECT_DIR$/src/Tests.java" />
     <entry file="file://$PROJECT_DIR$/src/Server.java" />
-    <entry file="file://$PROJECT_DIR$/src/Client.java" />
-    <entry file="uml://JAVA/">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>JAVA</ID>
-          <OriginalElement />
-          <nodes>
-            <node x="16.0" y="432.0">Server</node>
-            <node x="306.09765625" y="234.3984375">FileShare</node>
-            <node x="307.0" y="0.0">ConnectionHandler</node>
-            <node x="306.64453125" y="393.36328125">ServiceMain</node>
-            <node x="3.2109375" y="8.02734375">Client</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="Server" target="Client">
-              <point x="0.0" y="-81.0" />
-              <point x="0.0" y="191.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="395.697265625" y="422.306640625" />
-          <SelectedNodes>
-            <node>Client</node>
-          </SelectedNodes>
-          <Categories>
-            <Category>Fields</Category>
-            <Category>Methods</Category>
-            <Category>Properties</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>private</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
     <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -497,6 +478,48 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://JAVA/">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>JAVA</ID>
+          <OriginalElement />
+          <nodes>
+            <node x="16.0" y="432.0">Server</node>
+            <node x="573.0" y="573.0">src</node>
+            <node x="0.0" y="573.0">FileShare</node>
+            <node x="432.0" y="573.0">out</node>
+            <node x="307.0" y="0.0">ConnectionHandler</node>
+            <node x="222.0" y="573.0">ServiceMain</node>
+            <node x="0.0" y="0.0">Client</node>
+          </nodes>
+          <notes />
+          <edges>
+            <edge source="Server" target="Client">
+              <point x="0.0" y="-48.0" />
+              <point x="0.0" y="191.0" />
+            </edge>
+          </edges>
+          <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="-33.765625" y="365.3125" />
+          <SelectedNodes>
+            <node>ServiceMain</node>
+          </SelectedNodes>
+          <Categories>
+            <Category>Fields</Category>
+            <Category>Methods</Category>
+            <Category>Properties</Category>
+          </Categories>
+          <SCOPE>All</SCOPE>
+          <VISIBILITY>private</VISIBILITY>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
         </state>
       </provider>
     </entry>

@@ -10,10 +10,6 @@ public class FileShare  {
         this.socket = socket;
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-
     /**
      * Adapted from https://gist.github.com/CarlEkerot/2693246
      *

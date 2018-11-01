@@ -1,136 +1,37 @@
 import common.ClientHasNotConnectedException;
 import common.InvalidSocketAddressException;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ConnectionHandler {
 
-    private String username;
+    private static final int MAX_CONNECTION_ATTEMPTS = 4;
+    private static final int SO_TIMEOUT = 10000;
+
     private String destinationAddress = "127.0.0.1";
     private int portNumber = 51638;
+    private Socket socket;
+    private ServerSocket hostSocket;
 
-    public ConnectionHandler(){
-        this.username = setUsername();
+
+    public ConnectionHandler() {
+
     }
 
-    public ConnectionHandler(String s)  {
-        this.username = setUsername();
+    public ConnectionHandler(String s) {
         this.destinationAddress = s;
     }
 
-    public void menu() {
-        int choice = 0;
-        while (choice != 7) {
-            choice = getChoice(destinationAddress, portNumber);
-            switch (choice) {
-                case 1:
-                    setDestinationAddress();
-                    break;
-                case 2:
-                    setPortNumber();
-                    break;
-                case 3:
-                    try {
-                        Client client = new Client(destinationAddress, portNumber, username);
-                        client.connectSocket();
-                        new Thread(client).start();
-                        client.sendMessages();
-                        client.closeSocket();
-                    } catch (ClientHasNotConnectedException e) {
-                        System.out.println("Invalid Address, please check your destination before trying again...");
-                    } catch (InvalidSocketAddressException e) {
-                        System.out.println("Destination address and/or port number have are not valid.");
-                    }
-                    break;
-                case 4:
-                    try {
-                        Server server = new Server(portNumber, username);
-                        server.connectHostSocket();
-                        new Thread(server).start();
-                        server.sendMessages();
-                        server.closeSocket();
-                    } catch (ClientHasNotConnectedException e) {
-                        System.out.println("Server Socket Timed out...");
-                        System.out.println("Returning to menu...");
-                    }
-                    break;
-                case 5:
-                    try {
-                        Client client = new Client();
-                        FileShare fileShare = new FileShare(client.connectSocket(destinationAddress, portNumber));
-                        fileShare.sendFile();
-                        client.closeSocket(fileShare.getSocket());
-                    } catch (ClientHasNotConnectedException e) {
-                        System.out.println("Invalid Address, please check your destination before trying again...");
-                    } catch (InvalidSocketAddressException e) {
-                        System.out.println("Destination address and/or port number have are not valid.");
-                    }
-                    break;
-                case 6:
-                    try {
-                        Server server = new Server();
-                        FileShare fileShare = new FileShare(server.connectHostSocket(portNumber));
-                        fileShare.receiveFile();
-                        server.closeSocket(fileShare.getSocket());
-                    } catch (ClientHasNotConnectedException e) {
-                        System.out.println("Server Socket Timed out...");
-                        System.out.println("Returning to menu...");
-                    }
-                    break;
-            }
-        }
+    public String getDestinationAddress() {
+        return destinationAddress;
     }
 
-    /**
-     * Simple text UI for getting the users choice of function.
-     * @return choice - a number corresponding to a function offered by this application.
-     */
-    private int getChoice(String destinationAddress, int portNumber) {
-        Scanner kb = new Scanner(System.in);
-        int choice = 0;
-        System.out.println();
-        System.out.println("----------------------------------------------------------------------");
-        System.out.println("----------------------------------------------------------------------");
-        System.out.println();
-        System.out.println("Current Destination: " + (destinationAddress == null ? "Not Set" : destinationAddress));
-        System.out.println("Current Port Number: " + portNumber);
-        System.out.println();
-        System.out.println("Options:");
-        System.out.println();
-        System.out.println("1. Set Destination Address");
-        System.out.println("2. Set Port Number");
-        System.out.println("3. Connect to another user");
-        System.out.println("4. Host another user");
-        System.out.println("5. Send a file.");
-        System.out.println("6. Receive a file");
-        System.out.println("7. Quit");
-        System.out.println();
-        while (choice < 1 || choice > 7) {
-            System.out.println();
-            System.out.print("Choose an Option: ");
-            try {
-                choice = kb.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println();
-                System.out.println("Usage: 1-7");
-                break;
-            }
-        }
-        System.out.println();
-        System.out.println("----------------------------------------------------------------------");
-        System.out.println("----------------------------------------------------------------------");
-        System.out.println();
-        return choice;
-    }
-
-    /**
-     * Gets username from user.
-     */
-    public String setUsername() {
-        System.out.print("Please Enter your username: ");
-        Scanner kb = new Scanner(System.in);
-        return kb.nextLine();
+    public int getPortNumber() {
+        return portNumber;
     }
 
     /**
@@ -164,4 +65,69 @@ public class ConnectionHandler {
         System.out.print("Please enter your destination address/IP: ");
         destinationAddress = kb.nextLine();
     }
+
+    /**
+     * Attempts to connect to a socket according to the current objects destination address and port number
+     * @return a socket.
+     * @throws ClientHasNotConnectedException if the method cannot cannot to the host server for whatever reason.
+     * @throws InvalidSocketAddressException if the values for port number and destination address are invalid.
+     */
+    public Socket connectSocket() throws ClientHasNotConnectedException, InvalidSocketAddressException {
+        int i = 0;
+        while (i < MAX_CONNECTION_ATTEMPTS && socket == null) {
+            try {
+                if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
+                    throw new InvalidSocketAddressException();
+                }
+                System.out.println("Searching for server...");
+                socket = new Socket(destinationAddress, portNumber);
+                System.out.println("Server found...");
+            } catch (IOException e) {
+                System.out.println("Server not found... Retrying...");
+                i++;
+                if (i == MAX_CONNECTION_ATTEMPTS) {
+                    throw new ClientHasNotConnectedException();
+                }
+            }
+        }
+        return socket;
+    }
+
+    /**
+     * Waits for a connection from another terminal
+     * @throws ClientHasNotConnectedException If there is a socketTimeoutException
+     */
+    public Socket connectHostSocket() throws ClientHasNotConnectedException {
+        try {
+            hostSocket = new ServerSocket(portNumber);
+            hostSocket.setSoTimeout(SO_TIMEOUT);
+            System.out.println("Waiting for client to connect...");
+            socket = hostSocket.accept();
+            System.out.println("Client found....");
+            return socket;
+        } catch (IOException e) {
+            throw new ClientHasNotConnectedException();
+        }
+    }
+
+    /**
+     * Closes any active sockets in the object.
+     */
+    public void closeSockets() {
+        try {
+            if (socket != null) {
+                socket.close();
+                socket = null;
+            }
+            if (hostSocket != null) {
+                hostSocket.close();
+                hostSocket = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

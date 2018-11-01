@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5fc1fec-924a-47cd-85f2-82d34b7b2e53" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FileShare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileShare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MenuUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MenuUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,23 +63,23 @@
         <counts>
           <entry key="JAVA/" value="1" />
           <entry key="MODULES/mdl-Mini-Project-1" value="1" />
-          <entry key="java" value="2" />
+          <entry key="java" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="2" />
+          <entry key="JAVA" value="4" />
           <entry key="UML" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="656" />
+          <entry key="java" value="713" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="656" />
+          <entry key="JAVA" value="713" />
         </counts>
       </usages-collector>
     </session>
@@ -101,25 +102,16 @@
               <ID>JAVA</ID>
               <OriginalElement />
               <nodes>
-                <node x="16.0" y="432.0">Server</node>
-                <node x="573.0" y="573.0">src</node>
-                <node x="0.0" y="573.0">FileShare</node>
-                <node x="432.0" y="573.0">out</node>
-                <node x="307.0" y="0.0">ConnectionHandler</node>
-                <node x="222.0" y="573.0">ServiceMain</node>
-                <node x="0.0" y="0.0">Client</node>
+                <node x="319.0" y="318.0">FileShare</node>
+                <node x="0.0" y="0.0">ConnectionHandler</node>
+                <node x="0.0" y="318.0">MenuUI</node>
+                <node x="0.0" y="503.0">ServiceMain</node>
+                <node x="297.0" y="0.0">Client</node>
               </nodes>
               <notes />
-              <edges>
-                <edge source="Server" target="Client">
-                  <point x="0.0" y="-48.0" />
-                  <point x="0.0" y="191.0" />
-                </edge>
-              </edges>
+              <edges />
               <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="-33.765625" y="365.3125" />
-              <SelectedNodes>
-                <node>ServiceMain</node>
-              </SelectedNodes>
+              <SelectedNodes />
               <Categories>
                 <Category>Fields</Category>
                 <Category>Methods</Category>
@@ -131,11 +123,33 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FileShare.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/MenuUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="80" column="83" selection-start-line="80" selection-start-column="83" selection-end-line="80" selection-end-column="83" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+            <state relative-caret-position="-595">
+              <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+              <folding>
+                <element signature="e#3741#3742#0" expanded="true" />
+                <element signature="e#3780#3781#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -199,6 +213,8 @@
         <option value="$PROJECT_DIR$/src/Client.java" />
         <option value="$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
         <option value="$PROJECT_DIR$/src/ServiceMain.java" />
+        <option value="$PROJECT_DIR$/src/FileShare.java" />
+        <option value="$PROJECT_DIR$/src/MenuUI.java" />
       </list>
     </option>
   </component>
@@ -282,7 +298,7 @@
     <property name="SearchEverywhereHistoryKey" value="sout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541095098981" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541096138860" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -348,7 +364,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47142000" />
+    <option name="totallyTimeSpent" value="48121000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-5" y="8" width="1291" height="731" extended-state="0" />
@@ -362,7 +378,7 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.41207814" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.41196012" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.329582" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3995177" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -391,30 +407,6 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
-          <line>61</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
-          <line>105</line>
-          <properties />
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ServiceMain.java</url>
-          <line>137</line>
-          <properties />
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/common/src/InvalidPortNumberException.java" />
@@ -487,25 +479,16 @@
           <ID>JAVA</ID>
           <OriginalElement />
           <nodes>
-            <node x="16.0" y="432.0">Server</node>
-            <node x="573.0" y="573.0">src</node>
-            <node x="0.0" y="573.0">FileShare</node>
-            <node x="432.0" y="573.0">out</node>
-            <node x="307.0" y="0.0">ConnectionHandler</node>
-            <node x="222.0" y="573.0">ServiceMain</node>
-            <node x="0.0" y="0.0">Client</node>
+            <node x="319.0" y="318.0">FileShare</node>
+            <node x="0.0" y="0.0">ConnectionHandler</node>
+            <node x="0.0" y="318.0">MenuUI</node>
+            <node x="0.0" y="503.0">ServiceMain</node>
+            <node x="297.0" y="0.0">Client</node>
           </nodes>
           <notes />
-          <edges>
-            <edge source="Server" target="Client">
-              <point x="0.0" y="-48.0" />
-              <point x="0.0" y="191.0" />
-            </edge>
-          </edges>
+          <edges />
           <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="-33.765625" y="365.3125" />
-          <SelectedNodes>
-            <node>ServiceMain</node>
-          </SelectedNodes>
+          <SelectedNodes />
           <Categories>
             <Category>Fields</Category>
             <Category>Methods</Category>
@@ -516,10 +499,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/FileShare.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MenuUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="80" column="83" selection-start-line="80" selection-start-column="83" selection-end-line="80" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+        <state relative-caret-position="-595">
+          <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+          <folding>
+            <element signature="e#3741#3742#0" expanded="true" />
+            <element signature="e#3780#3781#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

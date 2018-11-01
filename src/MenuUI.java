@@ -66,8 +66,8 @@ public class MenuUI {
                     break;
                 case 5:
                     try {
-                        FileShare fileShare = new FileShare(connectionHandler.connectSocket());
-                        fileShare.sendFile();
+                        FileShare fileShare = new FileShare();
+                        fileShare.sendFile(connectionHandler.connectSocket());
                         connectionHandler.closeSockets();
                     } catch (ClientHasNotConnectedException e) {
                         System.out.println("Invalid Address, please check your destination before trying again...");
@@ -77,8 +77,8 @@ public class MenuUI {
                     break;
                 case 6:
                     try {
-                        FileShare fileShare = new FileShare(connectionHandler.connectHostSocket());
-                        fileShare.receiveFile();
+                        FileShare fileShare = new FileShare();
+                        fileShare.receiveFile(connectionHandler.connectHostSocket());
                         connectionHandler.closeSockets();
                     } catch (ClientHasNotConnectedException e) {
                         System.out.println("Server Socket Timed out...");

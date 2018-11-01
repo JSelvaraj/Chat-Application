@@ -4,10 +4,8 @@ import java.util.Scanner;
 
 public class FileShare  {
 
-    private Socket socket;
+    public FileShare() {
 
-    public FileShare(Socket socket) {
-        this.socket = socket;
     }
 
     /**
@@ -21,7 +19,7 @@ public class FileShare  {
      * 4. It sends the file over the filestream.
      *
      */
-    public void sendFile() {
+    public void sendFile(Socket socket) {
         try {
             File myFile = null;
             FileInputStream fis = null;
@@ -69,9 +67,9 @@ public class FileShare  {
      * 2. Reads the inputstream for the length specified above, creating a new file at $PROGRAM DIRECTORY/src/<filename>
      *
      */
-    public void receiveFile() {
+    public void receiveFile(Socket socket) {
         try {
-            FileOutputStream fos = new FileOutputStream(getFileName());
+            FileOutputStream fos = new FileOutputStream(getFileName(socket));
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             long size = 0;
             size = dis.readLong();
@@ -101,7 +99,7 @@ public class FileShare  {
      * @return filename - a String containing the filename of the file being sent.
      * @throws IOException If something interrupts the stream.
      */
-    private String getFileName() throws IOException {
+    private String getFileName(Socket socket) throws IOException {
 
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         char[] fileName = new char[dis.readInt()];

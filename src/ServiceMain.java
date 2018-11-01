@@ -3,6 +3,7 @@ import common.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,22 +33,48 @@ public class ServiceMain implements Runnable {
                     program.setPortNumber();
                     break;
                 case 3:
-                    program.connectSocket();
-                    new Thread(program).start();
-                    program.sendMessages();
+                    try {
+                        program.connectSocket();
+                        new Thread(program).start();
+                        program.sendMessages();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Invalid Address, please check your destination before trying again...");
+                    } catch (InvalidSocketAddressException e) {
+                        System.out.println("Destination address and/or port number have are not valid.");
+                    }
                     break;
                 case 4:
-                    program.connectHostSocket();
-                    new Thread(program).start();
-                    program.sendMessages();
+                    try {
+                        program.connectHostSocket();
+                        new Thread(program).start();
+                        program.sendMessages();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Server Socket Timed out...");
+                        System.out.println("Returning to menu...");
+                    }
                     break;
                 case 5:
-                    program.connectSocket();
-                    program.sendFile();
+                    try {
+                        program.connectSocket();
+                        program.sendFile();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Invalid Address, please check your destination before trying again...");
+                    } catch (InvalidSocketAddressException e) {
+                        System.out.println("Destination address and/or port number have are not valid.");
+                    }
                     break;
                 case 6:
-                    program.connectHostSocket();
-                    program.receiveFile();
+                    try {
+                        program.connectHostSocket();
+                        program.receiveFile();
+                        program.closeSocket();
+                    } catch (ClientHasNotConnectedException e) {
+                        System.out.println("Server Socket Timed out...");
+                        System.out.println("Returning to menu...");
+                    }
                     break;
             }
         }
@@ -55,12 +82,16 @@ public class ServiceMain implements Runnable {
 
     private static final String ESCAPE_CHARACTER = "q";
     private static final int HOST_SO_TIMEOUT = 10000;
+    private static final int MAX_CONNECTION_ATTEMPTS = 4;
 
     private Socket socket;
     private ServerSocket hostSocket;
     private String destinationAddress = "127.0.0.1";
     private int portNumber = 51638;
     private String username;
+
+    private boolean receiveMessagesThreadFlag = false;
+    private boolean sendMessagesThreadFlag = false;
 
     public ServiceMain() {
 
@@ -73,7 +104,7 @@ public class ServiceMain implements Runnable {
     /**
      * Gets a port number from the user. Also does some basic checks to ensure it's acceptable.
      */
-    protected void setPortNumber() {
+    private void setPortNumber() {
         System.out.println();
         Scanner kb = new Scanner(System.in);
         int tempPort = 0;
@@ -104,10 +135,11 @@ public class ServiceMain implements Runnable {
 
     /**
      * Attempts to connect to a socket and get an input and output stream.
+     * @throws ClientHasNotConnectedException if it cannot connect to a host at the address provided
      */
-    private void connectSocket() {
+    private void connectSocket() throws ClientHasNotConnectedException, InvalidSocketAddressException {
         int i = 0;
-        while (i < 4 && socket == null) {
+        while (i < MAX_CONNECTION_ATTEMPTS && socket == null) {
             try {
                 if (destinationAddress == null || portNumber < 1023 || portNumber > 65535) {
                     throw new InvalidSocketAddressException();
@@ -118,8 +150,9 @@ public class ServiceMain implements Runnable {
             } catch (IOException e) {
                 System.out.println("Server not found... Retrying...");
                 i++;
-            } catch (InvalidSocketAddressException e) {
-                System.out.println("Destination address and/or port number have are not valid.");
+                if (i == MAX_CONNECTION_ATTEMPTS) {
+                    throw new ClientHasNotConnectedException();
+                }
             }
         }
     }
@@ -128,18 +161,15 @@ public class ServiceMain implements Runnable {
     /**
      * Waits for a connection from another user and obtains input and output streams from that connection.
      */
-    private void connectHostSocket() {
-        if (hostSocket == null) {
-            try {
-                hostSocket = new ServerSocket(portNumber);
-                hostSocket.setSoTimeout(HOST_SO_TIMEOUT);
-                System.out.println("Waiting for client to connect...");
-                socket = hostSocket.accept();
-                System.out.println("Client found....");
-            } catch (IOException e) {
-                System.out.println("Server Socket Timed out...");
-                System.out.println("Returning to menu...");
-            }
+    private void connectHostSocket() throws ClientHasNotConnectedException {
+        try {
+            hostSocket = new ServerSocket(portNumber);
+            hostSocket.setSoTimeout(HOST_SO_TIMEOUT);
+            System.out.println("Waiting for client to connect...");
+            socket = hostSocket.accept();
+            System.out.println("Client found....");
+        } catch (IOException e) {
+            throw new ClientHasNotConnectedException();
         }
     }
 
@@ -151,29 +181,30 @@ public class ServiceMain implements Runnable {
      * at that time the user is informed and the program will exit..
      */
     private void sendMessages() {
+        sendMessagesThreadFlag = true;
         try {
-            if (socket == null) {
-                System.out.println("You have not connected to a host...");
-                System.out.println("Returning to menu...");
-            } else {
-                Scanner kb = new Scanner(System.in);
-                String msg = "";
-                PrintWriter sender = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-                System.out.println("You may now enter your messages...");
-                do  {
-                    msg = kb.nextLine();
-
+            Scanner kb = new Scanner(System.in);
+            String msg = "";
+            PrintWriter sender = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+            System.out.println("You may now enter your messages...");
+            do  {
+                msg = kb.nextLine();
+                if (msg.length() > 0) {
                     sender.println(username + ": " + msg);
                     sender.flush();
-
-                } while (!msg.equals(ESCAPE_CHARACTER));
+                }
+            } while (!msg.equals(ESCAPE_CHARACTER) && receiveMessagesThreadFlag);
+            if (msg.equals(ESCAPE_CHARACTER) ) {
+                System.out.println("Escape character detected... Closing connection to client");
+            } else {
+                System.out.println();
             }
-            System.out.println("Escape character detected... closing connection to client");
-            System.out.println("Terminating program");
-            System.exit(0);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sendMessagesThreadFlag = false;
     }
 
     /**
@@ -194,6 +225,7 @@ public class ServiceMain implements Runnable {
      * and the method throws an exception and exits.
      */
     private void receiveMessages() {
+        receiveMessagesThreadFlag = true;
         try {
             BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg;
@@ -203,28 +235,27 @@ public class ServiceMain implements Runnable {
                 if (msg != null && !extractMsg(msg).equals(ESCAPE_CHARACTER)) {
                     System.out.println(msg);
                 } else if (msg == null)  {
-                    System.out.println("Destination has terminated connection...");
-                    System.out.println("Program will now terminate...");
-                    System.exit(-1);
+                    throw new IOException();
                 }
-            } while (!extractMsg(msg).equals(ESCAPE_CHARACTER));
-            System.out.println("Escape Character Detected....");
-            System.out.println("Other terminal has terminated connection...");
-            System.out.println("Program will now shut down...");
-            System.exit(0);
+            } while (msg != null && !extractMsg(msg).equals(ESCAPE_CHARACTER) && sendMessagesThreadFlag);
+            if (extractMsg(msg).equals(ESCAPE_CHARACTER)) {
+                System.out.println("Other terminal has terminated connection...");
+                System.out.println("Press enter twice to return to menu...");
+            }
         } catch (IOException e) {
-            System.out.println("Socket has not been connected...");
+            System.out.println("Connection has been terminated");
         }
-
+        receiveMessagesThreadFlag = false;
     }
 
     public void run() {
-        if (socket != null) {
-            receiveMessages();
-        }
+        receiveMessages();
     }
 
-
+    /**
+     * Simple text UI for getting the users choice of function.
+     * @return choice - a number corresponding to a function offered by this application.
+     */
     private int menu() {
         Scanner kb = new Scanner(System.in);
         int choice = 0;
@@ -263,6 +294,9 @@ public class ServiceMain implements Runnable {
         return choice;
     }
 
+    /**
+     * Getsusername from user.
+     */
     private void setUsername() {
         System.out.print("Please Enter your username: ");
         Scanner kb = new Scanner(System.in);
@@ -271,87 +305,95 @@ public class ServiceMain implements Runnable {
 
     /**
      * Adapted from https://gist.github.com/CarlEkerot/2693246
+     *
+     * This method uses a byte stream to send a file to a receiving user.
+     * It follows a simple protocol:
+     * 1. It sends the length of the filename over the outputstream.
+     * 2. It sends the filename over the outputstream
+     * 3. It sends the length of the file over the outputstream
+     * 4. It sends the file over the filestream.
+     *
      */
     private void sendFile() {
         try {
-            if (socket == null) {
-                System.out.println("You have not connected to a receiver...");
-                System.out.println("Returning to menu...");
-            } else {
-                File myFile = null;
-                FileInputStream fis = null;
-                int i = 0; // counts how many times the user enters the wrong file address.
-                do {
-                    try {
-                        Scanner kb = new Scanner(System.in);
-                        System.out.print("Enter the directory+name of the file you want to transfer: ");
-                        String fileName = kb.nextLine();
-                        myFile = new File(fileName);
-                        fis = new FileInputStream(myFile);
-                    } catch (FileNotFoundException e) {
-                        System.out.println("File does not exist, please try again...");
-                        i++;
-                        if (i == 4) {
-                            System.out.println("Maximum attempts reached..");
-                            System.out.println("Check the file exists and try again..");
-                            System.out.println("Program closing..");
-                            System.exit(-1);
-                        }
+            File myFile = null;
+            FileInputStream fis = null;
+            int i = 0; // counts how many times the user enters the wrong file address.
+            do {
+                try {
+                    Scanner kb = new Scanner(System.in);
+                    System.out.print("Enter the directory+name of the file you want to transfer: ");
+                    String fileName = kb.nextLine();
+                    myFile = new File(fileName);
+                    fis = new FileInputStream(myFile);
+                } catch (FileNotFoundException e) {
+                    System.out.println("File does not exist, please try again...");
+                    i++;
+                    if (i == 4) {
+                        System.out.println("Maximum attempts reached..");
+                        System.out.println("Check the file exists and try again..");
+                        System.out.println("Program closing..");
+                        System.exit(-1);
                     }
-                } while (fis == null);
-                byte[] buffer = new byte[4096];
-                DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-                dos.writeInt(myFile.getName().length());
-                dos.writeChars(myFile.getName());
-
-                dos.writeLong(myFile.length()); //sends the size of the file.
-
-                while (fis.read(buffer) > 0) {
-                    dos.write(buffer);
                 }
-                System.out.println("File has been sent...");
-                System.out.println("Program will now terminate...");
-                fis.close();
-                dos.close();
-                System.exit(0);
+            } while (fis == null);
+            byte[] buffer = new byte[4096];
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(myFile.getName().length());
+            dos.writeChars(myFile.getName());
+
+            dos.writeLong(myFile.length()); //sends the size of the file.
+
+            while (fis.read(buffer) > 0) {
+                dos.write(buffer);
             }
+            System.out.println("File has been sent...");
+            System.out.println("Program will now return to menu...");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Connection Lost returning to menu...");
         }
     }
 
+    /**
+     * This method uses a bytestream to receive a file from another terminal. It first creates a FileOutputStream that
+     * uses the helper function getFileName.
+     * Then it follows the protocol:
+     * 1. Reads a long off the inputstream, representing the length of the file being sent.
+     * 2. Reads the inputstream for the length specified above, creating a new file at $PROGRAM DIRECTORY/src/<filename>
+     *
+     */
     private void receiveFile() {
         try {
-            if (socket == null) {
-                System.out.println("You have not connected to another user...");
-                System.out.println("Returning to the menu...");
-            } else {
-                FileOutputStream fos = new FileOutputStream(getFileName());
-                DataInputStream dis = new DataInputStream(socket.getInputStream());
-                long size = 0;
-                size = dis.readLong();
-
-                byte[] buffer = new byte[4096];
-                int read = 0;
-                int position = 0;
-                int remaining = (int) size - read;
-                while ((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
-                    position += read;
-                    remaining -= read;
-                    fos.write(buffer, 0, read);
-                }
-                dis.close();
-                fos.close();
-                System.out.println("File successfully received...");
-                System.out.println("Program will now terminate...");
-                System.exit(0);
+            FileOutputStream fos = new FileOutputStream(getFileName());
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            long size = 0;
+            size = dis.readLong();
+            byte[] buffer = new byte[4096];
+            int read = 0;
+            int position = 0;
+            int remaining = (int) size - read;
+            while ((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
+                position += read;
+                remaining -= read;
+                fos.write(buffer, 0, read);
             }
+            dis.close();
+            fos.close();
+            System.out.println("File successfully received...");
+            System.out.println("Program will now return to menu...");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Connection Lost returning to menu...");
         }
-
     }
 
+    /**
+     * Helper function that:
+     * 1. reads an int from the inputstream, representing the lenght of the filename
+     * 2. Reads that many characters off the inputstream.
+     * 3. Turns the resulting character array into a String.
+     * @return filename - a String containing the filename of the file being sent.
+     * @throws IOException If something interrupts the stream.
+     */
     private String getFileName() throws IOException {
 
         DataInputStream dis = new DataInputStream(socket.getInputStream());
@@ -360,6 +402,32 @@ public class ServiceMain implements Runnable {
             fileName[i] = dis.readChar();
         }
         return new String(fileName);
+    }
+
+    /**
+     * This method closes all active sockets.
+     *
+     * I currently do not know why, but if there is not a Thread.sleep call, the program will not continue even if both
+     * flags are false.
+     */
+    private void closeSocket() {
+        while (receiveMessagesThreadFlag || sendMessagesThreadFlag) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+
+            }
+        }
+        try {
+            socket.close();
+            socket = null;
+            if (hostSocket != null) {
+                hostSocket.close();
+                hostSocket = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

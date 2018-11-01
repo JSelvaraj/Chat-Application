@@ -6,8 +6,8 @@ import java.net.Socket;
 
 public class Server extends Client {
 
-    protected ServerSocket hostSocket;
-    protected static final int SO_TIMEOUT = 10000;
+    private ServerSocket hostSocket;
+    private static final int SO_TIMEOUT = 10000;
 
     public Server( int portNumber, String userName) {
         this.portNumber = portNumber;
@@ -18,6 +18,10 @@ public class Server extends Client {
 
     }
 
+    /**
+     * Waits for a connection from another terminal
+     * @throws ClientHasNotConnectedException If there is a socketTimeoutException
+     */
     public void connectHostSocket() throws ClientHasNotConnectedException {
         try {
             hostSocket = new ServerSocket(portNumber);
@@ -30,6 +34,12 @@ public class Server extends Client {
         }
     }
 
+    /**
+     * Listens at a port number and provides a socket.
+     * @param portNumber The portnumber the ServerSocket is listening on.
+     * @return the socket representing the input and outputstreams
+     * @throws ClientHasNotConnectedException If there is a socketTimeoutException
+     */
     public Socket connectHostSocket(int portNumber) throws ClientHasNotConnectedException {
         try {
             Socket socket;
@@ -44,6 +54,9 @@ public class Server extends Client {
         }
     }
 
+    /**
+     * Similar to method defined in superclass, but also closes and nulls the ServerSocket.
+     */
     @Override
     public void closeSocket() {
         while (receiveMessagesThreadFlag || sendMessagesThreadFlag) {
@@ -67,6 +80,10 @@ public class Server extends Client {
         }
     }
 
+    /**
+     * Similar to method defined in superclass, but also closes and nulls the ServerSocket.
+     * @param socket the socket that is closed.
+     */
     @Override
     public void closeSocket(Socket socket) {
         try {

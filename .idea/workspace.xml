@@ -81,17 +81,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
-              <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-              <folding>
-                <element signature="method#ServiceMain#0;class#ServiceMain#0" />
-                <element signature="method#setPortNumber#0;class#ServiceMain#0" />
-                <element signature="docComment;method#sendMessages#0;class#ServiceMain#0" />
-                <element signature="method#receiveFile#0;class#ServiceMain#0" />
-              </folding>
+            <state relative-caret-position="306">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="uml://JAVA/">
+          <provider selected="true" editor-type-id="UmlEditorProvider">
+            <state>
+              <ID>JAVA</ID>
+              <OriginalElement />
+              <nodes>
+                <node x="16.0" y="432.0">Server</node>
+                <node x="306.09765625" y="234.3984375">FileShare</node>
+                <node x="307.0" y="0.0">ConnectionHandler</node>
+                <node x="306.64453125" y="393.36328125">ServiceMain</node>
+                <node x="3.2109375" y="8.02734375">Client</node>
+              </nodes>
+              <notes />
+              <edges>
+                <edge source="Server" target="Client">
+                  <point x="0.0" y="-81.0" />
+                  <point x="0.0" y="191.0" />
+                </edge>
+              </edges>
+              <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="395.697265625" y="422.306640625" />
+              <SelectedNodes>
+                <node>Client</node>
+              </SelectedNodes>
+              <Categories>
+                <Category>Fields</Category>
+                <Category>Methods</Category>
+                <Category>Properties</Category>
+              </Categories>
+              <SCOPE>All</SCOPE>
+              <VISIBILITY>private</VISIBILITY>
             </state>
           </provider>
         </entry>
@@ -104,15 +133,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/common/ConnectionLostException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="1" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -220,8 +240,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -233,12 +253,6 @@
               <item name="Mini-Project-1" type="b2602c69:ProjectViewProjectNode" />
               <item name="Mini-Project-1" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Mini-Project-1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Mini-Project-1" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -253,7 +267,7 @@
     <property name="SearchEverywhereHistoryKey" value="sout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541089275371" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541089448960" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -319,12 +333,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45503000" />
+    <option name="totallyTimeSpent" value="45733000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1292" height="692" extended-state="6" />
+    <frame x="-5" y="8" width="1291" height="731" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17556635" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17813765" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -426,17 +441,27 @@
           <ID>JAVA</ID>
           <OriginalElement />
           <nodes>
-            <node x="327.0" y="0.0">Multicast</node>
-            <node x="0.0" y="0.0">ServiceMain</node>
+            <node x="16.0" y="432.0">Server</node>
+            <node x="306.09765625" y="234.3984375">FileShare</node>
+            <node x="307.0" y="0.0">ConnectionHandler</node>
+            <node x="306.64453125" y="393.36328125">ServiceMain</node>
+            <node x="3.2109375" y="8.02734375">Client</node>
           </nodes>
           <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="50.0" y="-86.0" />
-          <SelectedNodes />
+          <edges>
+            <edge source="Server" target="Client">
+              <point x="0.0" y="-81.0" />
+              <point x="0.0" y="191.0" />
+            </edge>
+          </edges>
+          <settings layout="Hierarchic Group" zoom="0.6228710462287105" x="395.697265625" y="422.306640625" />
+          <SelectedNodes>
+            <node>Client</node>
+          </SelectedNodes>
           <Categories>
             <Category>Fields</Category>
-            <Category>Constructors</Category>
             <Category>Methods</Category>
+            <Category>Properties</Category>
           </Categories>
           <SCOPE>All</SCOPE>
           <VISIBILITY>private</VISIBILITY>
@@ -446,14 +471,8 @@
     <entry file="file://$PROJECT_DIR$/src/common/InvalidPortNumberException.java" />
     <entry file="file://$PROJECT_DIR$/src/ServiceMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-          <folding>
-            <element signature="method#ServiceMain#0;class#ServiceMain#0" />
-            <element signature="method#setPortNumber#0;class#ServiceMain#0" />
-            <element signature="docComment;method#sendMessages#0;class#ServiceMain#0" />
-            <element signature="method#receiveFile#0;class#ServiceMain#0" />
-          </folding>
+        <state relative-caret-position="306">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
         </state>
       </provider>
     </entry>

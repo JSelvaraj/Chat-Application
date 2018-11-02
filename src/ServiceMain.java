@@ -15,12 +15,12 @@ import java.util.Scanner;
 public class ServiceMain {
     public static void main(String args[]) {
 
-        ConnectionHandler connectionHandler;
+        MenuUI MenuUI;
         if (args.length == 1) {
-            connectionHandler = new ConnectionHandler(args[0]);
+            MenuUI = new MenuUI(args[0]);
         } else {
-            connectionHandler = new ConnectionHandler();
+            MenuUI = new MenuUI();
         }
-        connectionHandler.menu();
+        MenuUI.menu();
     }
 }

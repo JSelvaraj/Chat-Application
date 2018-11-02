@@ -10,10 +10,6 @@ public class FileShare  {
         this.socket = socket;
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-
     /**
      * Adapted from https://gist.github.com/CarlEkerot/2693246
      *
@@ -33,7 +29,7 @@ public class FileShare  {
             do {
                 try {
                     Scanner kb = new Scanner(System.in);
-                    System.out.print("Enter the directory+name of the file you want to transfer: ");
+                    System.out.print("Enter the directory + name of the file you want to transfer: ");
                     String fileName = kb.nextLine();
                     myFile = new File(fileName);
                     fis = new FileInputStream(myFile);
@@ -53,7 +49,7 @@ public class FileShare  {
             dos.writeInt(myFile.getName().length());
             dos.writeChars(myFile.getName());
 
-            dos.writeLong(myFile.length()); //sends the size of the file.
+            dos.writeLong(myFile.length());
 
             while (fis.read(buffer) > 0) {
                 dos.write(buffer);
@@ -66,6 +62,8 @@ public class FileShare  {
     }
 
     /**
+     * Adapted from https://gist.github.com/CarlEkerot/2693246
+     *
      * This method uses a bytestream to receive a file from another terminal. It first creates a FileOutputStream that
      * uses the helper function getFileName.
      * Then it follows the protocol:

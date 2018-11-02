@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class ConnectionHandler {
 
     private static final int MAX_CONNECTION_ATTEMPTS = 4; //Maximum times a socket will try to connect to a host.
-    private static final int SO_TIMEOUT = 10000; // How long before a ServerSocket will stop listening(ms).
+    private  static final int SO_TIMEOUT = 10000; // How long before a ServerSocket will stop listening(ms).
 
     private String destinationAddress;
     private int portNumber = 51638;

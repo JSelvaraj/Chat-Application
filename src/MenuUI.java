@@ -2,6 +2,7 @@ import common.ClientHasNotConnectedException;
 import common.InvalidSocketAddressException;
 
 import java.awt.*;
+import java.net.SocketTimeoutException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class MenuUI {
      */
     public void menu() {
         int choice = 0;
-        while (choice != 7) {
+        while (choice != 8) {
             choice = getChoice(connectionHandler.getDestinationAddress(), connectionHandler.getPortNumber());
             switch (choice) {
                 case 1:
@@ -86,6 +87,14 @@ public class MenuUI {
                         System.out.println("Returning to menu...");
                     }
                     break;
+                case 7:
+                    try {
+                        GroupChat groupChat = new GroupChat(connectionHandler.getPortNumber());
+                        groupChat.Server();
+                    } catch (SocketTimeoutException e) {
+                        System.out.println("Socket timeout on group chat server...");
+                        System.out.println("Returning to menu...");
+                    }
             }
         }
     }
@@ -113,16 +122,17 @@ public class MenuUI {
         System.out.println("4. Host another user");
         System.out.println("5. Send a file.");
         System.out.println("6. Receive a file");
-        System.out.println("7. Quit");
+        System.out.println("7. Start Group Chat Server (note: cannot send messages while hosting)");
+        System.out.println("8. Exit");
         System.out.println();
-        while (choice < 1 || choice > 7) {
+        while (choice < 1 || choice > 8) {
             System.out.println();
             System.out.print("Choose an Option: ");
             try {
                 choice = kb.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println();
-                System.out.println("Usage: 1-7");
+                System.out.println("Usage: 1-8");
                 break;
             }
         }

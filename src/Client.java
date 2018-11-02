@@ -1,6 +1,3 @@
-import common.ClientHasNotConnectedException;
-import common.InvalidSocketAddressException;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -32,6 +29,8 @@ public class Client implements Runnable{
             Scanner kb = new Scanner(System.in);
             String msg = "";
             PrintWriter sender = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+            sender.println(username);
+            sender.flush();
             System.out.println("You may now enter your messages...");
             do  {
                 msg = kb.nextLine();
@@ -57,7 +56,7 @@ public class Client implements Runnable{
      * @param chatMessage the entire string sent (<username>: <msg>)
      * @return the message part of the chat message.
      */
-    private String extractMsg(String chatMessage) {
+    public static String extractMsg(String chatMessage) {
         int colonIndex = chatMessage.indexOf(":");
         String msg = chatMessage.substring(colonIndex + 1);
         return msg.trim();
@@ -75,7 +74,8 @@ public class Client implements Runnable{
         try {
             BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg;
-            msg = "<>";
+            msg = receiver.readLine();
+            System.out.println("You have connected to " + msg);
             do {
                 msg = receiver.readLine();
                 if (msg != null && !extractMsg(msg).equals(ESCAPE_CHARACTER)) {
@@ -93,7 +93,6 @@ public class Client implements Runnable{
             System.out.println("Press enter twice to return to menu...");
         }
         receiveMessagesThreadFlag = false;
-        synchronizer();
     }
 
     private void synchronizer() {

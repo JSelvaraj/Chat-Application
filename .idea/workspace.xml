@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5fc1fec-924a-47cd-85f2-82d34b7b2e53" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/common/ConnectionLostException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/ConnectionLostException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/UsernameNotSetException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/UsernameNotSetException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Mini-Project-1/crop.jpeg" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -155,8 +153,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="34">
+              <caret line="7" column="40" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
               <folding>
                 <element signature="e#3741#3742#0" expanded="true" />
                 <element signature="e#3780#3781#0" expanded="true" />
@@ -235,9 +233,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-15" />
-    <option name="y" value="24" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-99" />
+    <option name="y" value="-51" />
     <option name="width" value="3873" />
     <option name="height" value="2193" />
   </component>
@@ -315,7 +313,7 @@
     <property name="SearchEverywhereHistoryKey" value="sout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541160988710" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541178200477" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -381,12 +379,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48772000" />
+    <option name="totallyTimeSpent" value="50745000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-5" y="8" width="1291" height="731" extended-state="0" />
+    <frame x="-6" y="-6" width="1292" height="692" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17732793" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17718446" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -395,7 +393,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.41196012" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.329582" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3516874" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3995177" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -570,8 +568,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="34">
+          <caret line="7" column="40" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
           <folding>
             <element signature="e#3741#3742#0" expanded="true" />
             <element signature="e#3780#3781#0" expanded="true" />

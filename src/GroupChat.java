@@ -90,12 +90,10 @@ public class GroupChat {
                                 } else {
                                     messageQ.add(extractUsername(message) + " has left the group chat");
                                     System.out.println(extractUsername(message) + "has left the server");
-                                    socket.close();
-                                    clientQ.delete(socket);
+                                    removeSocket(socket);
                                 }
                             } else { // if message = null - This means connection has been lost so it can be terminated
-                                socket.close();
-                                clientQ.delete(socket);
+                                removeSocket(socket);
                             }
                         }
                     }
@@ -111,6 +109,20 @@ public class GroupChat {
             }
 
 
+        }
+    }
+
+    /**
+     * Helper function that closes a socket, deletes it from the clientQ and removes it from the Hashtable to free up space.
+     * @param socket the socket to be closed.
+     */
+    private void removeSocket(Socket socket) {
+        socketToUser.remove(socket);
+        try {
+            socket.close();
+            clientQ.delete(socket);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

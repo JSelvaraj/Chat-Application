@@ -15,12 +15,12 @@ import java.util.Scanner;
 public class ServiceMain {
     public static void main(String args[]) {
 
-        MenuUI MenuUI;
+        MenuUI menuUI;
         if (args.length == 1) {
-            MenuUI = new MenuUI(args[0]);
+            menuUI = new MenuUI(args[0]);
         } else {
-            MenuUI = new MenuUI();
+            menuUI = new MenuUI();
         }
-        MenuUI.menu();
+        menuUI.menu();
     }
 }

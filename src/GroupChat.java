@@ -43,6 +43,7 @@ public class GroupChat {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String username = reader.readLine();
             socketToUser.put(socket, username);
+	    System.out.println(username + " has joined the server");
         } catch (QueueFullException e) { //Impossible for this exception to be called at this time.
         } catch (SocketTimeoutException e) {
             try {
@@ -89,7 +90,7 @@ public class GroupChat {
                                     messageQ.add(message);
                                 } else {
                                     messageQ.add(extractUsername(message) + " has left the group chat");
-                                    System.out.println(extractUsername(message) + "has left the server");
+                                    System.out.println(extractUsername(message) + " has left the server");
                                     removeSocket(socket);
                                 }
                             } else { // if message = null - This means connection has been lost so it can be terminated

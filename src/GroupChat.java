@@ -127,7 +127,7 @@ public class GroupChat {
     }
 
     /**
-     * Tries to add new client for 10ms.
+     * Checks for new clients trying to connect to the server.
      *
      * If a new client is found, according to the messaging protocol they will send their username to the server.
      * the socket added is put into a hashtable with the username as the value. (<Key, Value> = <Socket, Username> )
@@ -172,7 +172,8 @@ public class GroupChat {
      * For each message it goes through the client queue of sockets and sends the message out to each.
      *
      * Before it sends the message it checks the current socket's associated username in the hashtable, against the
-     * username of the message.
+     * username of the message. If they match it doesn't send the message out as that means that the current message came
+     * from the current socket.
      * @throws QueueEmptyException
      * @throws IOException
      */

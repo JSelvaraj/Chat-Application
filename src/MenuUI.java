@@ -16,16 +16,17 @@ public class MenuUI {
     }
 
     public MenuUI(String s) {
+        this.username = setUsername();
         connectionHandler = new ConnectionHandler(s);
     }
 
     /**
      * This function creates objects and calls methods according to what function the users wants the applications to
-     * complete. To see what number corresponds to what function go to line 101-107 of this code.
+     * complete. To see what number corresponds to what function go to line 108-114 of this code.
      *
      * 3. Connect to another user. The Client objects allows the user to send and receive messages as long as it is
      * provided a socket to write to
-     * 4. Host another user. Same as 3. However the in this instance the connectionalHandler hosts a connection rather
+     * 4. Host another user. Same as 3. However the in this instance the connectionHandler hosts a connection rather
      * than connects to another users.
      * 5. Send a File. Sends a file to a given socket.
      * 6. Receives a file from a given socket.
@@ -66,8 +67,8 @@ public class MenuUI {
                     break;
                 case 5:
                     try {
-                        FileShare fileShare = new FileShare();
-                        fileShare.sendFile(connectionHandler.connectSocket());
+                        FileShare fileShare = new FileShare(connectionHandler.connectSocket());
+                        fileShare.sendFile();
                         connectionHandler.closeSockets();
                     } catch (ClientHasNotConnectedException e) {
                         System.out.println("Invalid Address, please check your destination before trying again...");
@@ -77,8 +78,8 @@ public class MenuUI {
                     break;
                 case 6:
                     try {
-                        FileShare fileShare = new FileShare();
-                        fileShare.receiveFile(connectionHandler.connectHostSocket());
+                        FileShare fileShare = new FileShare(connectionHandler.connectHostSocket());
+                        fileShare.receiveFile();
                         connectionHandler.closeSockets();
                     } catch (ClientHasNotConnectedException e) {
                         System.out.println("Server Socket Timed out...");
@@ -90,7 +91,7 @@ public class MenuUI {
     }
 
     /**
-     * Simple text UI for getting the users choice of function.
+     * Simple text UI for getting the users choice of function. Choices are outlined lines 108-114.
      * @return choice - a number corresponding to a function offered by this application.
      */
     private int getChoice(String destinationAddress, int portNumber) {
@@ -99,6 +100,7 @@ public class MenuUI {
         System.out.println();
         System.out.println("----------------------------------------------------------------------");
         System.out.println("----------------------------------------------------------------------");
+        System.out.println("WELCOME: " + username);
         System.out.println();
         System.out.println("Current Destination: " + (destinationAddress == null ? "Not Set" : destinationAddress));
         System.out.println("Current Port Number: " + portNumber);
